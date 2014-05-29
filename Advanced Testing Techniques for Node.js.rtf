@@ -1,0 +1,205 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf200
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;\red38\green38\blue38;\red56\green110\blue255;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww21700\viewh17840\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+
+\f0\fs24 \cf0 Advanced Testing Techniques for Node.js\
+\
+A bouquet of interesting, helpful and probably uncommon testing techniques.\
+\
+Tutorial style (Experience report with knowledge exchange)\
+\
+\
+Audience background:\
+- Knowledge of JavaScript and Node.js required\
+- Relevant for developers\
+\
+Benefits of participating:\
+Attendees get insights into\
+- pitfalls and possible problems when testing a node.js application\
+- exchange with other participants about possible solutions\
+- how we solved these problems\
+\
+Materials:\
+- Slides\
+- Our codebase https://github.com/softwerkskammer/Agora \
+\
+Process:\
+For each aspect, we will present the general problem, have a discussion with the audience on possible solutions for it, and we will demonstrate how we solved the problem.\
+\
+Timetable:\
+The coverage of each aspect (presentation, discussion, solution) should take approx. 10 - 15 minutes, depending on the number of aspects we will focus on.\
+\
+Outputs:\
+If interesting new solutions come up in the session, we will document them in the wiki.\
+\
+History:\
+This session has not been presented before.\
+\
+Themes:\
+\
+---------------------------\
+\
+website (live)\
+m\'e4rz angefangen\
+bewusst naiver ansatz\
+community plattform\
+schichtenarchitektur\
+viele kleine module\
+express\
+datenabh\'e4ngige Benutzerrechte\
+\
+selektive Auswahl von Frameworks\
+\
+In our node.js project "Agora", we have collected a number of interesting, helpful and probably uncommon testing techniques.\
+\
+\
+----\
+\
+Over the course of the last months, we created a community platform website for the German-speaking Software Craftsmanship communities. This site is based on node.js and the express.js platform.\
+Two important aspects drove our development: We deliberately tried to implement  the software as naive and simplistic as possible, and we both had a strong Java background and (initially) no JavaScript or Node.js background at all. This may have given rise to the one or the other unconventional or uncommon solution. Perhaps this makes our session even more interesting?\
+\
+During its development, we were continuously challenged to ensure the testability of our codebase, with questions like:\
+- How to mock indirect dependencies (that stem from nested "require"s)?\
+- We configure our application via a configuration framework. How can we provide a standardized test configuration with minimal setup?\
+- How to mock express middleware components, simulating their behavior and effects to the system under test?\
+- How to test DOM-free JavaScript code from the frontend (e.g. browser models) without browser and without phantom?\
+- How can I perform UI tests with only setting up a minimal part of  the application?\
+\
+In our session, we want to introduce these questions in detail, develop possible solutions with the participants, and finally present and discuss our solution.\
+\
+\
+--------------------\
+\
+\
+\
+\pard\pardeftab720
+\cf0 Problem: How to stub indirect dependencies (that stem from possibly nested "require"s)?\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+\cf0 ==============================================================\
+In our Node.js application (https://github.com/softwerkskammer/Agora) we have layered code, where each layer \'84require\'93s the layer below it.\
+\
+Node\'92s \'84require\'93 makes other modules accessible to the module at hand. Unfortunately, the inner workings of \'84require\'93 are not very helpful for testing. \'84Require\'93 is said to perform caching on modules that it loads, this way providing singletons. This sounds like the perfect solution: \'84require\'93 some lower layer module in a test, stub it, run the tests, and you\'92re done.\
+But it is not as easy as it seems.\
+Firstly, \'84require\'93 performs the caching based on the string that is passed to it, which is the path to the required module. Usually, tests are in different locations than production code, thus the required lower layer module will be cached twice: Once under the path string as it appears in the production code, and once under the path string as it appears in the test code. So you cannot simply access the lower layer module from the tests, you will always get the wrong version.\
+Secondly, \'84require\'93 not only caches the lower layer modules but also the module itself. Therefore, you cannot initialise a module under test in various shapes, e.g. once with a stubbed lower layer for unit testing and once with a non-stubbed lower layer for integration testing. The first initialisation wins, so you cannot alter the module in different tests, and you can never be sure to have the exact same module under test because its shape depends on the tests that were run before.\
+This behavior was so unreliable and unpredictable that we did not want to build our testing strategy on it.\
+\
+So we tried stubbing for the lower layer modules. Using standard mocking frameworks like proxyquire that allow to replace the \'84require\'93d modules, it turned out to be quite messy and cumbersome to stub the modules of the layer below. \
+Some examples are \
+https://github.com/softwerkskammer/Agora/blob/9d4660be158b0979b6560c01a2f1cadd88e9bbe4/test/groups/groupsAPI_test.js (lines 14-41, where we implement two stubs for the lower layer modules \'84sympaStub\'93 and \'84groupstoreStub\'93 and create a partially stubbed \'84groupsAPI\'93 module under test with proxyquire)\
+in order to test\
+https://github.com/softwerkskammer/Agora/blob/9d4660be158b0979b6560c01a2f1cadd88e9bbe4/lib/groups/groupsAPI.js\
+\
+or\
+https://github.com/softwerkskammer/Agora/blob/9d4660be158b0979b6560c01a2f1cadd88e9bbe4/test/activities/activities_test.js (lines 24-42, stubbing \'84activitiesAPIStub\'93 and \'84groupsAPIStub\'93 into \'84activityApp\'93)\
+in order to test \
+https://github.com/softwerkskammer/Agora/blob/9d4660be158b0979b6560c01a2f1cadd88e9bbe4/lib/activities/index.js .\
+\
+We tried to test two layers in integration, but the resulting code (with a proxyquire inside a proxyquire) was so unmaintainable that we immediately discarded this idea.\
+\
+To get out of this, we applied a pattern that seems to be fairly uncommon in the Node.js world, namely dependency injection via a framework. We chose CoolBeans (https://github.com/dhughes/CoolBeans) which stores and provides a single instance of each module. This way, we can access and modify the module in our test (usually using sinon) with minimal overhead.\
+\
+One example is\
+https://github.com/softwerkskammer/Agora/blob/master/test/activities/activities_test.js\
+(which tests https://github.com/softwerkskammer/Agora/blob/master/lib/activities/index.js).\
+The modules are loaded from CoolBeans in lines 10-19, and the stubbing (with sinon) takes place in lines 61-84. Also, one can add stubs in individual tests (see e.g. line 343).\
+\
+\
+Problem: We configure our application via a configuration framework. How can we provide a standardized test configuration with minimal setup?\
+==============================================================\
+The main sources for configuration of our application are the CoolBeans definitions and a number of config files that are served via nconf. Both are set up in a file called \'84configure.js\'93 before the app is launched.\
+In our tests, we want to have identical configurations in a lightweight manner. Therefore, we defined a file\
+\'84configureForTest.js\'93 that adapts both configuration sources to suit our tests:\
+1) For CoolBeans, we have defined a list of test-beans that replace some of the production beans. We use this to replace all infrastructure modules with test fakes that throw an exception so we will know that we forgot to set up some stub in the test. These infrastructure modules are those that connect to the database and another module that connects to the mailinglist server we integrated into our application. This way, it is impossible to accidentally access this infrastructure in our tests.\
+2) For nconf, we replace some of the production settings by test settings, e.g. we suppress logging output, and we perform configurations that are required by the application to function correctly (e.g. the application needs a superuser to be configured).\
+This way, we only need to include configureForTest in each of our tests, and that\'92s it. This is especially helpful because the tests can be run without any configuration files - a necessity when using a CI server like Travis.\
+\
+\
+Problem: How to adapt to various testing needs?\
+==============================\
+We want to tests different aspects of our application, mainly the frontend, the backend modules (in isolation), the backend application (addressed via HTTP), and the database layer. We use different tools to address each of these aspects:\
+In the frontend, we use QUnit (probably moving to Jasmine soon) with the karma runner\
+Module tests are done via mocha, HTTP-tests are done with supertest.\
+For the database layer, we need a different test setup (because in our standard test setup, the database layer is replaced by fakes). So we have a separate set of tests that run against the real database. These are also written in mocha.\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+
+\fs36 \cf0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+
+\fs24 \cf0 Problem: How can I perform UI tests with only setting up a minimal part of  the application?\
+==============================================================\
+\pard\pardeftab720
+\cf0 Our application consists of a number of independent modules that are wired together by the express stack configured in the \'a0global app. To perform UI tests on one of these modules, it is sufficient to set up an express stack with just this one module and some basic middleware modules. These are typically some of the common express add-ons for parsing forms, session management and jade-based view compilation as well as custom middleware for checking user rights and internationalisation.\
+\
+This is done via a testHelper. It sets up a single module app in a "standardised" express stack for testing purposes:\
+https://github.com/softwerkskammer/Agora/blob/master/testutil/testHelper.js\
+\
+In order to perform tests where a logged-in user is required, we add a userStub that takes advantage of a very small interface needed to check a logged-in user:\
+https://github.com/softwerkskammer/Agora/blob/master/testutil/userStub.js\
+The "UI" testing in this kind of set is limited to checking the produced html. For most of our pages this is sufficient.\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+\cf0 \
+\
+Problem: How to test a database (that uses native queries) in integration?\
+========================================================\
+In our default test configuration, we replace all modules that connect to the database by a fake. Thus, in order to run tests that integrate with the database, we need another test configuration. In this test configuration, we connect the database modules to a test database (i.e. a special collection in our mongoDB). This way, we cannot mess up production data even if we run the tests on the production system. This is our configuration for tests with DB:\
+https://github.com/softwerkskammer/Agora/blob/master/testutil/configureForTestWithDB.js\
+It uses the following beans definitions for the modules that connect to the database:\
+https://github.com/softwerkskammer/Agora/blob/master/config/testbeansWithDB.json\
+So far, only groupsPersistence, activitiesPersistence and sympaPersistence are being connected to the database; the others still point to the persistence fake because there are currently no integration tests for them.\
+\
+The actual database tests are now pretty straightforward:\
+https://github.com/softwerkskammer/Agora/blob/master/testWithDB/activitiesDB/activities_index_upcoming_past_test.js\
+In the setup, clear the database, persist the desired objects, run the test and check the results.\
+\
+Problem: How to test race conditions on a database?\
+==========================================\
+To prevent data loss due to concurrent modification of data, we use version counters with automatic retries. If an automatic retry is not feasible, the user is asked to redo his operation.\
+See:\
+Database handling (in function saveWithVersion): https://github.com/softwerkskammer/Agora/blob/master/lib/persistence/persistence.js\
+Retries (the last four functions): https://github.com/softwerkskammer/Agora/blob/master/lib/activities/activitiesAPI.js\
+Asking the user to redo his changes (topmost function \cf2 activitySubmitted\cf0 ): https://github.com/softwerkskammer/Agora/blob/master/lib/activities/index.js\
+How can we test that (a) there will be no data loss due to race conditions, and that (b) the automatic retry succeeds?\
+We need to establish an interleaved load-modify-save sequence which is of course impossible to reliably set up in an automated test. Therefore, we apply a trick: In the test, we stub the load operation so that it returns the object in question *before* the concurrent modification, while in the database we store the object in question *after* the concurrent modification. This way, we simulate that the concurrent modification takes place after the load operation but before the save operation that is performed in our test.\
+https://github.com/softwerkskammer/Agora/blob/master/testWithDB/activitiesDB/activities_index_concurrency_test.js\
+\
+For the automatic retry, we extend the stubbing of the load operation: On the second invocation (i.e. when the automatic retry is triggered) it returns the object in question *after* the concurrent modification.\
+In our test, we check whether the modifications from our test as well as the concurrent modifications are present in the object in question.\
+https://github.com/softwerkskammer/Agora/blob/master/testWithDB/activitiesDB/activities_concurrency_test.js\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+
+\fs36 \cf0 \
+\
+\
+\pard\pardeftab720
+
+\fs24 \cf0 Problem: How can I test frontend code that requires a DOM if all I have is jade template files (but no html files)?\
+==============================================================\
+Our application uses the jade rendering engine. In jade templates, placeholders can be filled at rendering time. \
+In our application\'92s forms, we use a client-side validation library called jquery-validate. We want to test the configuration and integration of this library into our forms.\
+Our solution is to extract the forms to jade-mixins and to compile them to standard html (providing dummy values for the placeholders where needed) which can then be used by the tests. See the \'84jade\'93 task in {\field{\*\fldinst{HYPERLINK "https://github.com/softwerkskammer/Agora/blob/master/Gruntfile.js"}}{\fldrslt \cf3 \ul \ulc3 https://github.com/softwerkskammer/Agora/blob/master/Gruntfile.js}}. This task is integrated in the combined task "frontendtests\'93.\
+\
+\pard\pardeftab720
+
+\fs36 \cf0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+\cf0 UNGEL\'d6ST:\
+\
+Problem: Coverage killt Code, der woanders gebraucht wird\
+============================\
+Code, der in die MongoDB injiziert wird\
+\
+Problem: Wie kann man Code Coverage aus mehreren Testl\'e4ufen zusammenfassen?\
+=========================\
+Keine Ahnung! Was schlagt Ihr vor?\
+\
+ZWEIFELHAFT:\
+\
+Problem: How to test DOM-free JavaScript code from the frontend (e.g. browser models) without browser and without phantom?\
+==============================================================\
+\
+\
+\
+}

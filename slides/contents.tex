@@ -1,0 +1,186 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CoolBeans
+\begin{frame}{Problem: How to stub indirect dependencies (that stem from possibly nested "require"s)?}
+\begin{itemize}
+\item x
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% nconf
+\begin{frame}{Problem: We configure our application via a configuration framework. How can we provide a standardized test configuration with minimal setup?}
+\begin{itemize}
+\item x
+\end{itemize}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+\begin{frame}{Problem: How to adapt to various testing needs?}
+\begin{itemize}
+\item x
+\end{itemize}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% UI tests / Application tests
+\begin{frame}{Problem: How can I perform UI tests with only setting up a minimal part of  the application?}
+\begin{itemize}
+\item x
+\end{itemize}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% DB tests
+% vorher: nconf
+\begin{frame}{Problem: How to test a database in integration?}
+\begin{itemize}
+\item We use native queries and other database features in our code.
+\item In our test configuration, we replace the module that connects to the database by a fake.
+\end{itemize}
+
+\begin{itemize}
+\item Question: How to test the database integration?
+\item Question: How to test native queries?
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Our Solution}
+\begin{itemize}
+\item We set up a second test configuration where we connect to a test database (i.e.~a special collection in our mongoDB).
+\item Nice: We cannot mess up production data even if we run the tests on the production system.
+\end{itemize}
+\end{frame}
+
+%This is our configuration for tests with DB:
+%https://github.com/softwerkskammer/Agora/blob/master/testutil/configureForTestWithDB.js
+%It uses the following beans definitions for the modules that connect to the database:
+%https://github.com/softwerkskammer/Agora/blob/master/config/testbeansWithDB.json
+%So far, only groupsPersistence, activitiesPersistence and sympaPersistence are being connected to the database; the others still point to the persistence fake because there are currently no integration tests for them.
+%
+%The actual database tests are now pretty straightforward:
+%https://github.com/softwerkskammer/Agora/blob/master/testWithDB/activitiesDB/activities_index_upcoming_past_test.js
+%In the setup, clear the database, persist the desired objects, run the test and check the results.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Race conditions
+% vorher: CoolBeans
+% vorher: Application tests
+% vorher: integrated db tests
+\begin{frame}{Problem: How to test race conditions on a database?}
+\begin{itemize}
+\item To prevent data loss due to concurrent modification of data, we use version counters.
+\item If feasible, we apply automatic retries. 
+\item Otherwise, the user is asked to redo his operation.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Question}
+\begin{itemize}
+\item How can we test that 
+\begin{itemize}
+\item there will be no data loss due to race conditions?
+\item the automatic retry succeeds?
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Our Solution (No-data-loss test)}
+\begin{itemize}
+\item Actual race condition (i.e.~interleaved load-modify-save sequence) cannot be established in automated test
+\item Trick:
+\begin{itemize}
+\item stub the load operation so that it returns the object in question \textbf{before} the concurrent modification
+\item initialize database with object in question \textbf{after} the concurrent modification
+\item this simulates that the concurrent modification takes place after the load operation but before the save operation that is performed in our test
+\end{itemize}
+\item Test checks that the concurrent modification is still present in the object in question after the attempted save operation.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Our Solution (Automatic-retry test)}
+\begin{itemize}
+\item To test the automatic retry:
+\begin{itemize}
+\item stub the load operation so that it returns the object in question \textbf{before} the concurrent modification on the first invocation
+\item and the object in question \textbf{after} the concurrent modification on the second invocation (i.e.~when automatic retry is triggered)
+\end{itemize}
+\item Test checks that the modification from our test as well as the concurrent modification is present in the object in question after the save operation.
+\end{itemize}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% DOM tests
+\begin{frame}{Problem: How can I test frontend code that requires a DOM if all I have is jade template files (but no html files)?}
+\begin{itemize}
+\item x
+\end{itemize}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% unsolved
+\begin{frame}{Problem: Coverage killt Code, der woanders gebraucht wird}
+\begin{itemize}
+\item x
+\end{itemize}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% unsolved
+\begin{frame}{Problem: Wie kann man Code Coverage aus mehreren Testläufen zusammenfassen?}
+\begin{itemize}
+\item x
+\end{itemize}
+\end{frame}
+
+
+
+% TEMPLATE:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{frame}{x}
+%\begin{itemize}
+%\item x
+%\end{itemize}
+%\end{frame}
+%
+%%%%%%%
+%\note{
+%\begin{description}
+%\item[N] x
+%\item[J] x
+%\end{description}
+%}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+{
+\usebackgroundtemplate{\includegraphics[width=\paperwidth,height=\paperheight]{background-slide.png}}
+\begin{frame}{Thank You!}
+
+        Slides on GitHub:
+        \vspace{-0.8em}
+        \begin{center}
+                \url{https://github.com/NicoleRauch/}
+        \end{center}
+
+     \begin{block}{Andreas Leidig}
+        \begin{description}[Twitterxx]
+                \item[E-Mail]  \href{mailto:andreas.leidig@msg-gillardon.de}{\texttt{andreas.leidig@msg-gillardon.de}}
+                \item[Twitter] \href{http://twitter.com/leiderleider}{\texttt{@leiderleider}}
+        \end{description}
+      \end{block}
+      \begin{block}{Nicole Rauch}
+        \begin{description}[Twitterxx]
+                \item[E-Mail]  \href{mailto:nicole.rauch@msg-gillardon.de}{\texttt{nicole.rauch@msg-gillardon.de}}
+                \item[Twitter] \href{http://twitter.com/NicoleRauch}{\texttt{@NicoleRauch}}
+        \end{description}
+        \end{block}
+\end{frame}
+}
