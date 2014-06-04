@@ -1,0 +1,13 @@
+include form.jade
+
+doctype html
+
+html
+  head
+    script(src='/jquery.js')
+    script(src='/jquery.validate.js')
+    script(src='/check-form.js')
+    title SPA fun with jade files
+  body
+    h1 SPA
+    +theform(val)

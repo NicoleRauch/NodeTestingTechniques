@@ -1,0 +1,9 @@
+mixin theform(value)
+  form#theform(action='/submit', method='post')
+    label text: 
+    input(type='text', name='text', placeholder='text')
+    button(type='submit') OK
+  if (value.bool)
+    p some true text
+  else
+    p some false text
