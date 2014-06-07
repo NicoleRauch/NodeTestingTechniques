@@ -5,12 +5,8 @@ var async = require('async');
 var Member = require('./member');
 
 var toMemberList = function (callback, err, result) {
-  if (err) {
-    return callback(err);
-  }
-  async.map(result, function (each, cb) {
-    cb(null, new Member({object: each}));
-  }, callback);
+  if (err) { return callback(err); }
+  async.map(result, function (each, cb) { cb(null, new Member(each)); }, callback);
 };
 
 module.exports = {
