@@ -2,9 +2,9 @@
 *.gz
 *.toc
 *.log
-DOMtestsWithJade/.idea
-forms.html
-DOMtestsWithJade/node_modules
+**/.idea
+**/forms.html
+**/node_modules
 slides/contents.aux
 slides/folien.aux
 slides/folien.nav
