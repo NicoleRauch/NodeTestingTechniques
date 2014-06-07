@@ -289,13 +289,9 @@
   <section>
     <h2>DOM Tests</h2>
 
-    <p>
-      We are checking user input for forms on the client side to provide fast feedback. We want to have this code unit tested.
-      This code relies heavily on DOM elements.
-    </p>
-    <p>
-      All our html code is rendered at runtime from jade templates and also provided with runtime state (via fields in <code>res.locals</code>)
-    </p>
+    <p>We want to unit test the client side validations. This code relies heavily on DOM elements.</p>
+    <p>We do not have static html files to provide a DOM for testing. 
+      All our html code is rendered at runtime from jade templates and also provided with runtime state (via fields in <code>res.locals</code>)</p>
 
     <aside class="notes">
       Hier die Slides für DOM testing.
@@ -323,12 +319,65 @@ html
     hr
     p The injected variable is #{val.words}
       </code></pre>
-
+      <p>The input field is marked mandatory via JavaScript (<code>jquery-validation</code>)</p>
     <aside class="notes">
-      Hier die Slides für DOM testing.
+      <p>#{val.words} is the runtime state</p>
+      <p>We only want to check that 'text' is mandatory</p>
     </aside>
   </section>
   
+  <section>
+    <h2>Our Solution</h2>
+    <ol>
+      <li>Extract the form to a jade mixin. So it can be included easily from some other jade file.</li>
+      <li>Create a new jade file including all our form mixins.</li>
+      <li>Create a dummy file for all needed <code>res.locals</code> state</li>
+      <li>Compile this jade file via a grunt task.</li>
+    </ol>
+  </section>
+  
+  <section>
+    <h4>The Mixin</h4>
+    <pre class="javascript"><code data-trim contenteditable>
+mixin theform(value)
+  form#theform(action='/submit', method='post')
+    label text:
+    input(type='text', name='text', placeholder='text')
+    button(type='submit') OK
+  hr
+  p The injected variable is #{value.words}
+    </code></pre>
+    <h4>forms.jade</h4>
+    <pre class="javascript"><code data-trim contenteditable>
+include ../../views/form
++theform(val)
+    </code></pre>
+    <h4>locals</h4>
+    <pre class="javascript"><code data-trim contenteditable>
+module.exports = {val: {words: 'some text'}};
+    </code></pre>
+  </section>
+
+  <section>
+    <h2>Gruntfile</h2>
+    <pre class="javascript"><code data-trim contenteditable>
+jade: {
+  compile: {
+    options: {
+      data: function () {
+        // include the locals
+        return require('./frontendtests/fixtures/locals');
+      }
+    },
+    files: {
+      // files to compile
+      'frontendtests/fixtures/forms.html': 'frontendtests/fixtures/forms.jade'
+    }
+  }
+}
+    </code></pre>
+  </section>
+
 </section>
 
 <section>
