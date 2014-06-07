@@ -1,0 +1,16 @@
+doctype html
+
+html
+  head
+    script(src='/jquery.js')
+    script(src='/jquery.validate.js')
+    script(src='/check-form.js')
+    title SPA fun with jade files
+  body
+    h1 SPA
+    form#theform(action='/submit', method='post')
+      label text: 
+      input(type='text', name='text', placeholder='text')
+      button(type='submit') OK
+    hr
+    p The injected variable is #{val.words}
