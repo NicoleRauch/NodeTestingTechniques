@@ -1,0 +1,47 @@
+var express = require('express');
+var http = require('http');
+var jade = require('jade');
+var path = require('path');
+var serveStatic = require('serve-static');
+
+var members = require('./lib/members')();
+
+function useApp(parent, url, child) {
+  function ensureRequestedUrlEndsWithSlash(req, res, next) {
+    if (!(/\/$/).test(req.url)) { return res.redirect(req.url + '/'); }
+    next();
+  }
+
+  parent.get('/' + url, ensureRequestedUrlEndsWithSlash);
+  parent.use('/' + url + '/', child);
+  return child;
+}
+
+module.exports = function (conf) {
+
+  return {
+    create: function () {
+      var app = express();
+
+      app.set('view engine', 'jade');
+      app.use(serveStatic('public'));
+
+      app.get('/', function (req, res) {
+        res.redirect('/members/');
+      });
+      useApp(app, 'members', members.create);
+
+      return app;
+    },
+
+    start: function (done) {
+      var port = conf.get('port');
+      var app = this.create();
+      this.server = http.createServer(app);
+      this.server.listen(port, function () {
+        appLogger.info('Server running at port ' + port);
+        if (done) { done(); }
+      });
+    }
+  };
+};

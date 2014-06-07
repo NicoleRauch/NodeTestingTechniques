@@ -1,0 +1,38 @@
+{
+  "name": "StubbingIndirectDependencies",
+  "description": "a demo project for NodeTestingTechniques",
+  "version": "0.0.1",
+  "author": "Nicole Rauch & Andreas Leidig",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://www.opensource.org/licenses/MIT"
+    }
+  ],
+  "main": "",
+  "engines": {
+    "node": ">0.10"
+  },
+  "dependencies": {
+    "async": "~0.2.6",
+    "express": "~4.0",
+    "jade": "~1.3",
+    "mongodb": "1.1.x",
+    "nconf": "~0.6.7",
+    "serve-static": "~1.1",
+    "connect-mongo": "0.3.x"
+  },
+  "devDependencies": {
+    "grunt": "~0.4",
+    "grunt-contrib-clean": "~0.5",
+    "grunt-contrib-jade": "~0.12",
+    "chai": "~1.5.0",
+    "request": "~2.16.6",
+    "proxyquire": "~0.4.0",
+    "supertest": "~0.5",
+    "sinon": "~1.6.0"
+  },
+  "scripts": {
+    "test": "grunt"
+  }
+}
