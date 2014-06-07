@@ -1,6 +1,6 @@
 "use strict";
 
-var store = require('./memberstore');
+var store = require('nconf').get('beans').get('memberstore');
 
 module.exports = {
 

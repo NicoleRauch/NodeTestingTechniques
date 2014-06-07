@@ -9,7 +9,8 @@ function createConfiguration() {
   nconf.argv().env();
   nconf.defaults({
     mongoHost: 'localhost',
-    mongoPort: '27017'
+    mongoPort: '27017',
+    beans: new Beans('./config/beans.json')
   });
 
   return nconf;

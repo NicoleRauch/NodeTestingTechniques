@@ -2,7 +2,8 @@
 
 var express = require('express');
 var path = require('path');
-var api = require('./membersAPI');
+
+var api = require('nconf').get('beans').get('membersAPI');
 
 var app = express();
 app.set('views', path.join(__dirname, 'views'));

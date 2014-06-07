@@ -1,0 +1,10 @@
+{
+  "membersApp": {"module": "./lib/members"},
+  "membersAPI": {"module": "./lib/members/membersAPI"},
+  "memberstore": {"module": "./lib/members/memberstore"},
+  "membersPersistence": {
+    "module": "./lib/persistence/persistence",
+    "constructorArgs": { "collectionName": "memberstore" }
+  },
+  "member": {"module": "./lib/members/member"}
+}

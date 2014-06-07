@@ -1,8 +1,10 @@
 "use strict";
 
-var persistence = require('../persistence/persistence')('memberstore');
 var async = require('async');
-var Member = require('./member');
+
+var beans = require('nconf').get('beans');
+var persistence = beans.get('membersPersistence');
+var Member = beans.get('member');
 
 var toMemberList = function (callback, err, result) {
   if (err) { return callback(err); }
