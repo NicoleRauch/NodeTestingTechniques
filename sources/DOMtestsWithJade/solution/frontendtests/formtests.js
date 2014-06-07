@@ -3,8 +3,8 @@
 
   describe('The Form', function () {
     beforeEach(function (done) {
-      $(function () { done();}) // just to wait for the form to be loaded
-    })
+      $(function () { done();}); // just to wait for the form to be loaded
+    });
 
     var checkFieldMandatory = function (fieldname) {
       var field = $(fieldname);
