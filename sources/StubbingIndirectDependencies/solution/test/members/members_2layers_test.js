@@ -2,9 +2,10 @@
 "use strict";
 var request = require('supertest');
 var sinon = require('sinon').sandbox.create();
-var proxyquire = require('proxyquire');
 
-var Member = require('../../lib/members/member');
+var beans = require('../../testutil/configureForTest').get('beans');
+var Member = beans.get('member');
+var memberstore = beans.get('memberstore');
 
 var testMember = new Member(
   { nickname: 'Nickinick',
@@ -12,24 +13,17 @@ var testMember = new Member(
     lastname: 'Miller'
   });
 
-var memberstoreStub = {
-  allMembers: function (callback) {
-    callback(null, [testMember]);
-  }
-};
-
-var membersAPIStub = proxyquire('../../lib/members/membersAPI', {
-  './memberstore': memberstoreStub
-});
-
-var app = proxyquire('../../lib/members', {
-  './membersAPI': membersAPIStub
-});
-
+var app = require('../../testutil/testHelper')('membersApp').createApp();
 
 describe('Members application', function () {
 
   it('lists all members', function (done) {
+
+    beforeEach(function () {
+      sinon.stub(memberstore, 'allMembers', function (callback) {
+        callback(null, [testMember]);
+      });
+    });
 
     request(app)
       .get('/')

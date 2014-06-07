@@ -25,10 +25,10 @@
   "devDependencies": {
     "grunt": "~0.4",
     "grunt-mocha-istanbul": "~1.4",
-    "proxyquire": "~0.4.0",
     "request": "~2.36",
     "sinon": "~1.10",
-    "supertest": "~0.12"
+    "supertest": "~0.12",
+    "utils-merge": "~1.0"
   },
   "scripts": {
     "test": "grunt"

@@ -1,0 +1,3 @@
+{
+  "membersPersistence": {"module": "./test/persistence/testpersistence"}
+}
