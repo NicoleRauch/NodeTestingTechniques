@@ -5,8 +5,8 @@
 **/.idea
 **/forms.html
 **/node_modules
-slides/contents.aux
-slides/folien.aux
-slides/folien.nav
-slides/folien.out
-slides/folien.pdf
+**/contents.aux
+**/folien.aux
+**/folien.nav
+**/folien.out
+**/folien.pdf
