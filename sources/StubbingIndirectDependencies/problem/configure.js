@@ -8,7 +8,6 @@ function createConfiguration() {
 // the environment variables and/or from the command line
   nconf.argv().env();
   nconf.defaults({
-    port: '17124',
     mongoHost: 'localhost',
     mongoPort: '27017'
   });
