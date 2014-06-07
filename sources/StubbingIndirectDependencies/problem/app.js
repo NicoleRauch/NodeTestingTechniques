@@ -4,7 +4,7 @@ var jade = require('jade');
 var path = require('path');
 var serveStatic = require('serve-static');
 
-var members = require('./lib/members')();
+var members = require('./lib/members');
 
 function useApp(parent, url, child) {
   function ensureRequestedUrlEndsWithSlash(req, res, next) {
@@ -29,7 +29,7 @@ module.exports = function (conf) {
       app.get('/', function (req, res) {
         res.redirect('/members/');
       });
-      useApp(app, 'members', members.create);
+      useApp(app, 'members', members);
 
       return app;
     },
