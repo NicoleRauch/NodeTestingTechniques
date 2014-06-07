@@ -1,3 +1,3 @@
 'use strict';
 
-module.exports = {val:{bool: false}};
+module.exports = {val: {words: 'some text'}};

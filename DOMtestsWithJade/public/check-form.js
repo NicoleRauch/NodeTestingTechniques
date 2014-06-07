@@ -4,8 +4,6 @@ var form_validator;
 
   var initValidator = function () {
 
-    // DO NOT FORGET TO KEEP THIS FILE IN SYNC WITH /lib/commons/validation.js
-
     form_validator = $('#theform').validate({
       rules: {
         text: 'required'

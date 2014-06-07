@@ -1,15 +1,23 @@
+'use strict';
+
 var express = require('express');
 var jade = require('jade');
 var path = require('path');
 var serveStatic = require('serve-static');
+var bodyparser = require('body-parser');
 
 var app = express();
 
 app.set('view engine', 'jade');
+app.use(bodyparser.urlencoded());
 app.use(serveStatic('public'));
 
 app.get('/', function (req, res) {
-  res.render('index', {val: {bool: true}});  
+  res.render('index', {val: {words: 'Hallo'}});  
+});
+
+app.post('/submit', function (req, res) {
+  res.end(JSON.stringify(req.body));
 });
 
 var server = app.listen(3000, function() {

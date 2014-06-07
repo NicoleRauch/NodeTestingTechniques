@@ -3,7 +3,5 @@ mixin theform(value)
     label text: 
     input(type='text', name='text', placeholder='text')
     button(type='submit') OK
-  if (value.bool)
-    p some true text
-  else
-    p some false text
+  hr
+  p The injected variable is #{value.words}
