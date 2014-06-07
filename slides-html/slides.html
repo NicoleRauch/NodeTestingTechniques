@@ -285,6 +285,50 @@
       Hier die Slides für DOM testing.
     </aside>
   </section>
+  
+  <section>
+    <h2>DOM Tests</h2>
+
+    <p>
+      We are checking user input for forms on the client side to provide fast feedback. We want to have this code unit tested.
+      This code relies heavily on DOM elements.
+    </p>
+    <p>
+      All our html code is rendered at runtime from jade templates and also provided with runtime state (via fields in <code>res.locals</code>)
+    </p>
+
+    <aside class="notes">
+      Hier die Slides für DOM testing.
+    </aside>
+  </section>
+  
+  <section>
+    <h2>Example</h2>
+
+    <pre><code data-trim contenteditable>
+doctype html
+
+html
+  head
+    script(src='/jquery.js')
+    script(src='/jquery.validate.js')
+    script(src='/check-form.js')
+    title SPA fun with jade files
+  body
+    h1 SPA
+    form#theform(action='/submit', method='post')
+      label text:
+      input(type='text', name='text', placeholder='text')
+      button(type='submit') OK
+    hr
+    p The injected variable is #{val.words}
+      </code></pre>
+
+    <aside class="notes">
+      Hier die Slides für DOM testing.
+    </aside>
+  </section>
+  
 </section>
 
 <section>
