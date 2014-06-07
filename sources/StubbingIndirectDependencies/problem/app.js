@@ -35,11 +35,11 @@ module.exports = function (conf) {
     },
 
     start: function (done) {
-      var port = conf.get('port');
       var app = this.create();
       this.server = http.createServer(app);
+      var port = 17999;
       this.server.listen(port, function () {
-        appLogger.info('Server running at port ' + port);
+        console.log('Server running at port ' + port);
         if (done) { done(); }
       });
     }
