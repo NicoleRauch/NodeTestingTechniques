@@ -278,7 +278,7 @@
     <h2>DOM Tests</h2>
 
     <p>
-      <b>Problem:</b> How can I test frontend code that requires a DOM if all I have is jade template files (but no html files)?}
+      <b>Problem:</b> How can I test frontend code that requires a DOM if all I have is jade template files (but no html files)?
     </p>
 
     <aside class="notes">
@@ -299,9 +299,9 @@
   </section>
   
   <section>
-    <h2>Example</h2>
+    <h2>form.jade</h2>
 
-    <pre><code data-trim contenteditable>
+    <pre class="javascript"><code data-trim contenteditable>
 doctype html
 
 html
@@ -318,12 +318,59 @@ html
       button(type='submit') OK
     hr
     p The injected variable is #{val.words}
-      </code></pre>
-      <p>The input field is marked mandatory via JavaScript (<code>jquery-validation</code>)</p>
+    </code></pre>
+    <p>The input field is marked mandatory via JavaScript (<code>jquery-validation</code>)</p>
     <aside class="notes">
       <p>#{val.words} is the runtime state</p>
       <p>We only want to check that 'text' is mandatory</p>
     </aside>
+  </section>
+  
+  <section>
+    <h2>check-form.js</h2>
+
+    <pre class="javascript"><code data-trim contenteditable>
+var form_validator;
+var initValidator = function () {
+  form_validator = $('#theform').validate({
+    rules: { text: 'required' },
+  });
+  form_validator.form();
+  var handler = function (element) {
+    return function () { form_validator.element(element); };
+  };
+  ['#theform [name=text]'].forEach(function (each) {
+    $(each).keyup(handler(each));
+  });
+};
+$(document).ready(initValidator);
+    </code></pre>
+  </section>
+  
+  <section>
+    <h2>The Test</h2>
+
+    <pre class="javascript"><code data-trim contenteditable>
+describe('The Form', function () {
+  var checkFieldMandatory = function (fieldname) {
+    var field = $(fieldname);
+    field.val('');
+    expect(form_validator.element(field)).toBe(false);
+    expect(form_validator.errorList[0].message)
+      .toBe('This field is required.');
+    field.val('.');
+    expect(form_validator.element(field)).toBe(true);
+  };
+      
+  it('checks that "text" is mandatory', function () {
+    checkFieldMandatory('#theform [name=text]');
+  });
+});
+    </code></pre>
+  </section>
+
+  <section>
+    <h1>CODE</h1>
   </section>
   
   <section>
@@ -376,6 +423,10 @@ jade: {
   }
 }
     </code></pre>
+  </section>
+
+  <section>
+    <h1>CODE</h1>
   </section>
 
 </section>
