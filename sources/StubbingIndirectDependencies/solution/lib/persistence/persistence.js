@@ -1,7 +1,7 @@
 "use strict";
 
-module.exports = function (connectionName) {
-  var conn = connectionName;
+module.exports = function (collectionName) {
+  var conn = collectionName;
   var Db = require('mongodb').Db;
   var Server = require('mongodb').Server;
 

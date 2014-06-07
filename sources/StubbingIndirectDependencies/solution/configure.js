@@ -8,6 +8,7 @@ function createConfiguration() {
 // create an nconf object, and initialize it with given values from
 // the environment variables and/or from the command line
   nconf.argv().env();
+  nconf.file('dummy', './config/dummy.json'); // to make the defaults read/write *wtf*
   nconf.defaults({
     mongoHost: 'localhost',
     mongoPort: '27017',

@@ -15,15 +15,15 @@ var testMember = new Member(
 
 var app = require('../../testutil/testHelper')('membersApp').createApp();
 
-describe('Members application', function () {
+describe('Members application (2 layers)', function () {
+
+  beforeEach(function () {
+//    sinon.stub(memberstore, 'allMembers', function (callback) {
+//      callback(null, [testMember]);
+//    });
+  });
 
   it('lists all members', function (done) {
-
-    beforeEach(function () {
-      sinon.stub(memberstore, 'allMembers', function (callback) {
-        callback(null, [testMember]);
-      });
-    });
 
     request(app)
       .get('/')

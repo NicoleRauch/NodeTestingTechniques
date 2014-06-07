@@ -1,4 +1,3 @@
-/*jslint stupid: true */
 'use strict';
 
 module.exports = function (testBeansFilename) {
