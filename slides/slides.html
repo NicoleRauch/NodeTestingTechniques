@@ -94,17 +94,32 @@
   </section>
 </section>
 
+<!-- NCONF -->
 <section>
-  <!-- NCONF -->
   <section>
     <h2>Application Configuration</h2>
-  
+
     <p>
       <b>Problem:</b> We configure our application via a configuration framework. How can we provide a standardized test configuration with minimal setup?
     </p>
 
     <aside class="notes">
       Hier die Slides für nconf.
+    </aside>
+  </section>
+
+  <section>
+    <h3>Testing with dependencies on the environment?</h3>
+
+    <p>This is not acceptable. We need to provide a standard testing configuration independent from the production configuration.</p>
+    <ul>
+      <li>Logging</li>
+      <li>Passwords</li>
+      <li>Local Paths</li>
+    </ul>
+
+    <aside class="notes">
+      Anything we need to be individual depending on the environment.
     </aside>
   </section>
 </section>
