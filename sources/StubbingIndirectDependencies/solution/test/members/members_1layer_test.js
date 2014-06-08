@@ -3,7 +3,7 @@
 var request = require('supertest');
 var sinon = require('sinon').sandbox.create();
 
-var beans = require('../../testutil/configureForTest').get('beans');
+var beans = require('../../configure').get('beans');
 var Member = beans.get('member');
 var membersAPI = beans.get('membersAPI');
 
@@ -15,7 +15,7 @@ var testMember = new Member(
 
 var app = require('../../testutil/testHelper')('membersApp').createApp();
 
-describe('Members application', function () {
+describe('Members application (1 layer)', function () {
 
   beforeEach(function () {
     sinon.stub(membersAPI, 'allMembers', function (callback) {

@@ -1,10 +1,9 @@
 'use strict';
 
 var express = require('express');
+var beans = require('../configure').get('beans');
 
 module.exports = function (internalAppName) {
-  var beans = require('./configureForTest').get('beans');
-
   return {
     createApp: function () {
       var app = express();

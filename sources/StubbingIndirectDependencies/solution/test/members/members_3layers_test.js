@@ -3,7 +3,7 @@
 var request = require('supertest');
 var sinon = require('sinon').sandbox.create();
 
-var beans = require('../../testutil/configureForTest').get('beans');
+var beans = require('../../configure').get('beans');
 var Member = beans.get('member');
 var membersPersistence = beans.get('membersPersistence');
 
@@ -15,7 +15,7 @@ var testMember = new Member(
 
 var app = require('../../testutil/testHelper')('membersApp').createApp();
 
-describe('Members application', function () {
+describe('Members application (3 layers)', function () {
 
   beforeEach(function () {
     sinon.stub(membersPersistence, 'list', function (sortOrder, callback) {
