@@ -92,6 +92,87 @@
       Hier die Slides für Cool Beans.
     </aside>
   </section>
+    
+  <section>
+    <h2>Node.js Dependencies</h2>
+      - Module hierarchy index-service-store-persistence:
+      
+      (grafik, code)
+      
+      - Node.js uses <code>require</code> to load modules:
+      
+      (example)
+    </section>  
+    
+    <section>
+      - In different tests, we want to stub (and don't want to stub) different modules:
+      Just testing one module: stub the underlying module
+      Testing two modules in integration: stub the second module
+      Testing three modules in integration: stub the lowest module
+      
+      (attention! why would we want to do this?)
+    </section>
+    
+    <section>
+      - Interesting: <code>require</code> promises a singleton module
+      -> why not stub this module?
+      BUT: <code>require</code> provides one singleton per import path!
+      So the production import produces one instance and the test import produces A DIFFERENT instance -> bummer...
+      
+      - Proxyquire can replace a <code>require</code>d module.
+    </section>  
+        
+    <section>
+      So if we just test one module, we are fine:
+      
+      But if we test two modules in integration, things get slightly more complicated:
+      
+      And if we test three modules in integration, even more so:
+    </section>
+  
+  <section>
+      <h2>What would be a better solution?</h2>
+      Try out
+      Discuss
+  </section>
+    
+    <section>
+        <h2>Our Solution</h2>
+        We decided to use...
+    </section>
+
+    <section>
+        <h2>Dependency Injection</h2>
+    </section>
+
+    <section>
+        A framework called <code>CoolBeans</code>
+        
+        We define our singleton beans:
+        
+        (beans.json)
+        
+        Plug them into nconf:
+        
+        (configure.js)
+        
+    </section>
+    
+    <section>
+        And use them in production and test:
+        
+        (beans.get)
+        
+        In the tests, we can stub exactly the module we want:
+        
+        For a single layer test:
+        
+        For a two-layer test:
+        
+        For a three-layer test:
+        
+    </section>
+
 </section>
 
 <!-- NCONF -->
