@@ -33,5 +33,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-karma');
 
   grunt.registerTask('test', ['clean', 'jade', 'karma:once']);
+  grunt.registerTask('default', ['test']);
 
 };

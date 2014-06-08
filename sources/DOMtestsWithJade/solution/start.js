@@ -1,8 +1,6 @@
 'use strict';
 
 var express = require('express');
-var jade = require('jade');
-var path = require('path');
 var serveStatic = require('serve-static');
 var bodyparser = require('body-parser');
 
