@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 function Member(object) {
   this.firstname = object.firstname;

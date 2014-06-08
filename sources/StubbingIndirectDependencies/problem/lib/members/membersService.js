@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var store = require('./memberstore');
 

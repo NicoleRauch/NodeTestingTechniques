@@ -2,7 +2,7 @@
 
 var nconf = require('nconf');
 nconf.overrides({
-  superuser: ['Charli']
+  superuser: ['Bobby']
 });
 
 module.exports = require('../configure');

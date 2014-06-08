@@ -13,7 +13,7 @@ describe('Members application', function () {
       .get('/')
       .expect(200)
       .expect(/Members Overview/)
-      .expect(/Bobby Charlston \(Charli\) is a SUPERUSER/, done);
+      .expect(/Bobby Charlton \(Bobby\) is a SUPERUSER/, done);
 
   });
 });

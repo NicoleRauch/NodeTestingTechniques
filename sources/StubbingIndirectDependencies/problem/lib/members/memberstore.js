@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var persistence = require('../persistence/persistence')('memberstore');
 var async = require('async');

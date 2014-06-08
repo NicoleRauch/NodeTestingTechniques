@@ -1,7 +1,5 @@
-/*global describe, it */
-"use strict";
+'use strict';
 var request = require('supertest');
-var sinon = require('sinon').sandbox.create();
 var proxyquire = require('proxyquire');
 
 var Member = require('../../lib/members/member');
@@ -32,7 +30,6 @@ var app = proxyquire('../../lib/members', {
   './membersService': membersServiceStub
 });
 
-
 describe('Members application (3 layers)', function () {
 
   it('lists all members', function (done) {
@@ -44,8 +41,4 @@ describe('Members application (3 layers)', function () {
       .expect(/Peter Miller \(Nickinick\)/, done);
 
   });
-
-  afterEach(function () {
-    sinon.restore();
-  })
 });

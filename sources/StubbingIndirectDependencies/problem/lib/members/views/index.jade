@@ -1,16 +1,9 @@
+html
+  head
+    title Members Overview
 
-mixin memberlist(members)
-  ul
-    for member in members
-      li: .member: a(href="/members/#{member.nickname}") #{member.firstname} #{member.lastname} (#{member.nickname})
-
-
-block title
-  | Members Overview
-
-block content
-  .span12
-    .page-header
-      h2 Members&nbsp;
-        small All
-    mixin memberlist(members)
+  body
+    h2 Members
+    ul
+      for member in members
+        li #{member.firstname} #{member.lastname} (#{member.nickname})

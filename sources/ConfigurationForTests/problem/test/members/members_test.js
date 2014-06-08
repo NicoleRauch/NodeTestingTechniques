@@ -6,7 +6,7 @@ var app = require('../../testutil/testHelper')('../lib/members').createApp();
 describe('Members application', function () {
 
   beforeEach(function (done) {
-    nconf.set('superuser', 'Charli', function () {
+    nconf.set('superuser', 'Bobby', function () {
       done();
     });
   });
@@ -17,7 +17,7 @@ describe('Members application', function () {
       .get('/')
       .expect(200)
       .expect(/Members Overview/)
-      .expect(/Bobby Charlston \(Charli\) is a SUPERUSER/, done);
+      .expect(/Bobby Charlton \(Bobby\) is a SUPERUSER/, done);
 
   });
 });

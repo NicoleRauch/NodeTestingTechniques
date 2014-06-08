@@ -4,7 +4,7 @@ module.exports = function (grunt) {
   grunt.initConfig({
     mocha_istanbul: {
       test: {
-        src: 'lib', // the folder, not the files,
+        src: 'test', // the folder, not the files,
         options: {
           root: 'lib',
           mask: '**/*.js',

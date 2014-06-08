@@ -12,7 +12,7 @@ app.get('/', function (req, res) {
   var members = [
     {firstname: 'Michael', lastname: 'Ballack', nickname: 'Balli'},
     {firstname: 'Karlheinz', lastname: 'Rummenigge', nickname: 'Rums'},
-    {firstname: 'Bobby', lastname: 'Charlston', nickname: 'Charli'}
+    {firstname: 'Bobby', lastname: 'Charlton', nickname: 'Bobby'}
   ];
   res.render('index', { members: members, superusers: nconf.get('superuser') });
 });
