@@ -224,17 +224,91 @@ module.exports = {
   </section>
 
   <section>
-    <h3>Testing with dependencies on the environment?</h3>
+    <h3>Testing with dependencies on the local environment?</h3>
 
-    <p>This is not acceptable. We need to provide a standard testing configuration independent from the production configuration.</p>
+    <p>This is not acceptable. We need to provide an independent testing configuration.</p>
     <ul>
       <li>Logging</li>
       <li>Passwords</li>
+      <li>Special User Privileges</li>
       <li>Local Paths</li>
+      <li>…</li>
     </ul>
 
     <aside class="notes">
-      Anything we need to be individual depending on the environment.
+      <p>Anything we need to be individual depending on the environment.</p>
+      <p>The database connection will never be overridden.</p>
+    </aside>
+  </section>
+
+  <section>
+    <h3>EXAMPLE</h3>
+    <h4>Superuser Privileges</h4>
+
+    <p>A configuration file defines the ids of users that have superuser privileges.</p>
+    <p>We want to test that the privileges have an effect.</p>
+    <p>We chose <code>nconf.js</code> for that job</p>
+
+    <aside class="notes">
+      <p>Show in code</p>
+    </aside>
+  </section>
+
+  <section>
+    <h3>EXAMPLE</h3>
+    
+    <h4>configure.js</h4>
+    <pre class="javascript"><code data-trim contenteditable>
+var nconf = require('nconf');
+nconf.file('superusers', './config/superusers.json');
+module.exports = nconf;
+    </code></pre>
+
+    <h4>superusers.json</h4>
+    <pre class="javascript"><code data-trim contenteditable>
+{ "superuser" : ["Balli","Rums"] }
+    </code></pre>
+
+    <h4>usage</h4>
+    <pre class="javascript"><code data-trim contenteditable>
+// index.js
+res.render('index', { members: members, superusers: require('nconf').get('superuser') });
+
+// index.jade
+if (superusers.indexOf(member.nickname) > -1)
+  |  is a SUPERUSER
+    </code></pre>
+    
+    <aside class="notes">
+      <p>Show in code</p>
+    </aside>
+  </section>
+
+  <section>
+    <h1>CODE</h1>
+
+    <aside class="notes">
+      <p>Switch to workspace "Configuration for Tests - problem"</p>
+    </aside>
+  </section>
+
+  <section>
+    <h2>What would be a better solution?</h2>
+
+    <aside class="notes">
+      <p>Switch to workspace "Configuration for Tests - problem"</p>
+    </aside>
+  </section>
+
+  <section>
+    <h2>Our solution</h2>
+
+    <ul>
+      <li>We use <code>nconf.overrides()</code> function for that to provide a standardised test setup.</li>
+    </ul>
+    
+    <aside class="notes">
+      <p>Switch to workspace "Configuration for Tests - problem"</p>
     </aside>
   </section>
 </section>
@@ -614,6 +688,28 @@ jade: {
 
     theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
     transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+      width: 1366,
+      height: 800,
+
+    // Factor of the display size that should remain empty around the content
+      margin: 0.1,
+
+    // Bounds for smallest/largest possible scale to apply to content
+      minScale: 0.2,
+      maxScale: 1.0,
+
+    // Transition style
+    transition: 'linear', // default/cube/page/concave/zoom/linear/fade/none
+
+    // Transition speed
+    transitionSpeed: 'default', // default/fast/slow
+
+    // Transition style for full page slide backgrounds
+    backgroundTransition: 'none', // default/none/slide/concave/convex/zoom
 
     // Parallax scrolling
     // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
