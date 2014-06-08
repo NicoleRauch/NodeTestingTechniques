@@ -215,6 +215,7 @@ it('lists all members', function (done) {
     
     <section>
       <h2>Integration Testing</h2>
+        Integrating 2 layers:
         <pre class="javascript"><code data-trim contenteditable>
 var memberstoreStub = {
   allMembers: function (callback) {
@@ -239,6 +240,7 @@ it('lists all members', function (done) {
     </section>
   
     <section>
+        Integrating 3 layers:
         <pre class="javascript"><code data-trim contenteditable>
 var persistenceStub = function () {
   return {
@@ -282,30 +284,74 @@ it('lists all members', function (done) {
     </section>
 
     <section>
-        A framework called <code>CoolBeans</code>
-        
+        <p>
+        We use a framework called <code>CoolBeans</code>.
+        </p>
+        <br/>
         We define our singleton beans:
+        <pre class="javascript"><code data-trim contenteditable>
+{
+  "membersApp": {"module": "./lib/members"},
+  "membersService": {"module": "./lib/members/membersService"},
+  "memberstore": {"module": "./lib/members/memberstore"},
+  "membersPersistence": {
+    "module": "./lib/persistence/persistence",
+    "constructorArgs": { "collectionName": "memberstore" }
+  },
+  "member": {"module": "./lib/members/member"}
+}
+        </code></pre>
         
-        (beans.json)
-        
-        Plug them into nconf:
-        
-        (configure.js)
+        We plug them into nconf:
+        <pre class="javascript"><code data-trim contenteditable>
+function createConfiguration() {
+  nconf.defaults({
+    // ...
+    beans: new Beans('./config/beans.json')
+  });
+  return nconf;
+}
+        </code></pre>
         
     </section>
     
     <section>
-        And use them in production and test:
+        And use them in production:
+        <pre class="javascript"><code data-trim contenteditable>
+var service = require('nconf').get('beans').get('membersService');
+        </code></pre>
         
-        (beans.get)
+        and test:
+        <pre class="javascript"><code data-trim contenteditable>
+var service = require('../../configure').get('beans').get('membersService');
+        </code></pre>
         
-        In the tests, we can stub exactly the module we want:
+        Stubbing for a single layer test:
+        <pre class="javascript"><code data-trim contenteditable>
+  beforeEach(function () {
+    sinon.stub(membersService, 'allMembers', function (callback) {
+      callback(null, [testMember]);
+    });
+  });
+        </code></pre>
         
-        For a single layer test:
+        Stubbing for a two-layer test:
+        <pre class="javascript"><code data-trim contenteditable>
+  beforeEach(function () {
+    sinon.stub(memberstore, 'allMembers', function (callback) {
+      callback(null, [testMember]);
+    });
+  });
+        </code></pre>
         
-        For a two-layer test:
-        
-        For a three-layer test:
+        Stubbing for a three-layer test:
+        <pre class="javascript"><code data-trim contenteditable>
+  beforeEach(function () {
+    sinon.stub(membersPersistence, 'list', function (sortOrder, callback) {
+      callback(null, [testMember]);
+    });
+  });
+        </code></pre>
         
     </section>
 
