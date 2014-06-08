@@ -86,7 +86,7 @@
     <h2>Indirect dependencies</h2>
   
     <p>
-      <b>Problem:</b> How to stub indirect dependencies (that stem from possibly nested 'require's)?
+      <b>Problem:</b> How to stub dependencies at different layers?
     </p>
 
     <aside class="notes">
@@ -95,10 +95,43 @@
   </section>
     
   <section>
-    <h2>Node.js Dependencies</h2>
-      - Module hierarchy index-service-store-persistence:
+    <h2>Application Structure</h2>
+      <img src="pics/MembersModule.svg">
+  </section>
+    
+  <section>
+    index.js:
+    <pre class="javascript"><code data-trim contenteditable>
+var service = require('./membersService');
+
+app.get('/', function (req, res, next) {
+  service.allMembers(function (err, members) {
+    res.render('index', { members: members });
+  });
+});
+    </code></pre>
       
-      (grafik, code)
+      membersService.js:
+    <pre class="javascript"><code data-trim contenteditable>
+var store = require('./memberstore');
+
+module.exports = {
+  allMembers: function (callback) {
+    store.allMembers(callback);
+  }
+};
+    </code></pre>
+      
+      memberstore.js:
+    <pre class="javascript"><code data-trim contenteditable>
+var persistence = require('../persistence/persistence')('memberstore');
+
+module.exports = {
+  allMembers: function (callback) {
+    persistence.list({lastname: 1, firstname: 1}, callback);
+  }
+};
+    </code></pre>
       
       - Node.js uses <code>require</code> to load modules:
       
