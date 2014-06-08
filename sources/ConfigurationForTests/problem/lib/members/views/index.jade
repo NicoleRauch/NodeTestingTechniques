@@ -1,0 +1,12 @@
+html
+  
+  head
+    title Members Overview
+  
+  body
+    h2 Members
+    ul
+      for member in members
+        li #{member.firstname} #{member.lastname} (#{member.nickname})
+          if (superusers.indexOf(member.nickname) > -1)
+            |  is a SUPERUSER
