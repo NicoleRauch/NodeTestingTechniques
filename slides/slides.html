@@ -132,36 +132,131 @@ module.exports = {
   }
 };
     </code></pre>
-      
-      - Node.js uses <code>require</code> to load modules:
-      
-      (example)
     </section>  
     
     <section>
-      - In different tests, we want to stub (and don't want to stub) different modules:
-      Just testing one module: stub the underlying module
-      Testing two modules in integration: stub the second module
-      Testing three modules in integration: stub the lowest module
-      
+      <h2>Unit and Integration Tests</h2>
+        <p>
+        Stubbing allows to isolate one or several modules
+        </p>
+        <img src="pics/MembersModule.svg" width="60%">
+        <p>
+        But how?
+        </p>
+        
+    <aside class="notes">
       (attention! why would we want to do this?)
+    </aside>
+
     </section>
     
     <section>
-      - Interesting: <code>require</code> promises a singleton module
-      -> why not stub this module?
-      BUT: <code>require</code> provides one singleton per import path!
-      So the production import produces one instance and the test import produces A DIFFERENT instance -> bummer...
-      
-      - Proxyquire can replace a <code>require</code>d module.
+      <p>
+      <b>Interesting:</b> <code>require</code> promises a singleton module
+      </p>
+      <p>
+      <b>BUT:</b> <code>require</code> creates one singleton per import path!
+      </p><br/>
+      In production:
+        <pre class="javascript"><code data-trim contenteditable>
+var service = require('./membersService');        
+        </code></pre>
+
+      In test:
+        <pre class="javascript"><code data-trim contenteditable>
+var service = require('../../lib/members/membersService');        
+        </code></pre>
+      <br/>
+      Two different instances!
     </section>  
         
     <section>
+        <h2>Proxyquire</h2>
+        <p>
+        Replaces a <code>require</code>d module inside a module.
+        </p>
+        <br/>
+        Sounds great - let's try this out!
+    </section>
+    
+    <section>
+      <h2>Unit Testing index.js</h2>
+        <pre class="javascript"><code data-trim contenteditable>
+var membersServiceStub = {
+  allMembers: function (callback) {
+    callback(null, [testMember]);
+  }
+};
+
+var app = proxyquire('../../lib/members', {
+  './membersService': membersServiceStub
+});
+
+it('lists all members', function (done) {
+  request(app)
+    .get('/')
+    .expect(/Peter Miller \(Nickinick\)/, done);
+});        
+        </code></pre>
+        
+    <aside class="notes">
       So if we just test one module, we are fine:
       
       But if we test two modules in integration, things get slightly more complicated:
-      
-      And if we test three modules in integration, even more so:
+    </aside>
+    </section>
+    
+    <section>
+      <h2>Integration Testing</h2>
+        <pre class="javascript"><code data-trim contenteditable>
+var memberstoreStub = {
+  allMembers: function (callback) {
+    callback(null, [testMember]);
+  }
+};
+
+var membersServiceStub = proxyquire('../../lib/members/membersService', {
+  './memberstore': memberstoreStub
+});
+
+var app = proxyquire('../../lib/members', {
+  './membersService': membersServiceStub
+});
+
+it('lists all members', function (done) {
+  request(app)
+    .get('/')
+    .expect(/Peter Miller \(Nickinick\)/, done);
+});        
+        </code></pre>
+    </section>
+  
+    <section>
+        <pre class="javascript"><code data-trim contenteditable>
+var persistenceStub = function () {
+  return {
+    list: function (sortOrder, callback) {
+      callback(null, [testMember]);
+    } }; };
+
+var memberstoreStub = proxyquire('../../lib/members/memberstore', {
+  '../persistence/persistence': persistenceStub
+});
+
+var membersServiceStub = proxyquire('../../lib/members/membersService', {
+  './memberstore': memberstoreStub
+});
+
+var app = proxyquire('../../lib/members', {
+  './membersService': membersServiceStub
+});
+
+it('lists all members', function (done) {
+  request(app)
+    .get('/')
+    .expect(/Peter Miller \(Nickinick\)/, done);
+});        
+        </code></pre>
     </section>
   
   <section>
