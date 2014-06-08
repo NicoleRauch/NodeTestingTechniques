@@ -12,14 +12,14 @@ var testMember = new Member(
     lastname: 'Miller'
   });
 
-var membersAPIStub = {
+var membersServiceStub = {
   allMembers: function (callback) {
     callback(null, [testMember]);
   }
 };
 
 var app = proxyquire('../../lib/members', {
-  './membersAPI': membersAPIStub
+  './membersService': membersServiceStub
 });
 
 

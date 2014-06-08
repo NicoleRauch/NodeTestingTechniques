@@ -24,12 +24,12 @@ var memberstoreStub = proxyquire('../../lib/members/memberstore', {
   '../persistence/persistence': persistenceStub
 });
 
-var membersAPIStub = proxyquire('../../lib/members/membersAPI', {
+var membersServiceStub = proxyquire('../../lib/members/membersService', {
   './memberstore': memberstoreStub
 });
 
 var app = proxyquire('../../lib/members', {
-  './membersAPI': membersAPIStub
+  './membersService': membersServiceStub
 });
 
 

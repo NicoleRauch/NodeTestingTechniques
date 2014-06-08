@@ -1,6 +1,6 @@
 {
   "membersApp": {"module": "./lib/members"},
-  "membersAPI": {"module": "./lib/members/membersAPI"},
+  "membersService": {"module": "./lib/members/membersService"},
   "memberstore": {"module": "./lib/members/memberstore"},
   "membersPersistence": {
     "module": "./lib/persistence/persistence",

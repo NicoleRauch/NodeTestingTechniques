@@ -3,7 +3,7 @@
 var express = require('express');
 var path = require('path');
 
-var api = require('nconf').get('beans').get('membersAPI');
+var api = require('nconf').get('beans').get('membersService');
 
 var app = express();
 app.set('views', path.join(__dirname, 'views'));

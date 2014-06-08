@@ -18,12 +18,12 @@ var memberstoreStub = {
   }
 };
 
-var membersAPIStub = proxyquire('../../lib/members/membersAPI', {
+var membersServiceStub = proxyquire('../../lib/members/membersService', {
   './memberstore': memberstoreStub
 });
 
 var app = proxyquire('../../lib/members', {
-  './membersAPI': membersAPIStub
+  './membersService': membersServiceStub
 });
 
 

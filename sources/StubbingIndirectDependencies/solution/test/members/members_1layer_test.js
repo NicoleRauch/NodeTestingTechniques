@@ -5,7 +5,7 @@ var sinon = require('sinon').sandbox.create();
 
 var beans = require('../../configure').get('beans');
 var Member = beans.get('member');
-var membersAPI = beans.get('membersAPI');
+var membersService = beans.get('membersService');
 
 var testMember = new Member(
   { nickname: 'Nickinick',
@@ -18,7 +18,7 @@ var app = require('../../testutil/testHelper')('membersApp').createApp();
 describe('Members application (1 layer)', function () {
 
   beforeEach(function () {
-    sinon.stub(membersAPI, 'allMembers', function (callback) {
+    sinon.stub(membersService, 'allMembers', function (callback) {
       callback(null, [testMember]);
     });
   });
