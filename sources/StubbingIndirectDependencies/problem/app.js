@@ -1,7 +1,6 @@
 var express = require('express');
 var http = require('http');
 var jade = require('jade');
-var path = require('path');
 var serveStatic = require('serve-static');
 
 var members = require('./lib/members');
