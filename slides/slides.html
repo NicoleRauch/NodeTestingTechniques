@@ -319,6 +319,9 @@ it('lists all members', function (done) {
     <p>
       <b>Problem:</b> We configure our application via a configuration framework. How can we provide a standardized test configuration with minimal setup?
     </p>
+    <p>
+      We do not want to change the configuration in each test setup, we only want "<i>the</i> test configuration". (There can be exceptions to this rule)
+    </p>
 
     <aside class="notes">
       Hier die Slides für nconf.
@@ -434,6 +437,47 @@ require('../../testutil/configureForTest');
 
     <aside class="notes">
       <p>Switch to workspace "ConfigurationForTests/solution"</p>
+    </aside>
+  </section>
+
+<!-- Cool Beans / nconf extra -->
+  <section>
+    <h1>Extra</h1>
+    <h2>Hide your ressources</h2>
+  
+    <p>
+      <b>Problem:</b> How can you protect external ressources from accidental change during a (potentially broken) test?
+    </p>
+
+    <aside class="notes">
+      Database / 3rd party services / files
+    </aside>
+  </section>
+
+  <section>
+    <h2>Our solution</h2>
+  
+    <p>
+      Combine <code>CoolBeans</code> with <code>nconf</code> by replacing some beans with fake implementations. 
+    </p>
+
+    <h4>beans.json</h4>
+    <pre class="javascript"><code data-trim contenteditable>
+"sympa": {"module": "./lib/groups/sympa"},
+"activitiesPersistence": {
+  "module": "./lib/persistence/persistence",
+  "constructorArgs": { "collectionName": "activitystore" }
+},
+    </code></pre>
+
+    <h4>testbeans.json</h4>
+    <pre class="javascript"><code data-trim contenteditable>
+"sympa": {},
+"activitiesPersistence": {"module": "./test/persistence/testpersistence"},
+    </code></pre>
+
+    <aside class="notes">
+      Database / 3rd party services / files
     </aside>
   </section>
 </section>
