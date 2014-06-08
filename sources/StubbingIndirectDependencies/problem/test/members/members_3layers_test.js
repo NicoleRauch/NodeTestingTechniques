@@ -33,7 +33,7 @@ var app = proxyquire('../../lib/members', {
 });
 
 
-describe('Members application', function () {
+describe('Members application (3 layers)', function () {
 
   it('lists all members', function (done) {
 
