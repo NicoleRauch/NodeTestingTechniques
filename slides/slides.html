@@ -628,17 +628,32 @@ require('../../testutil/configureForTest');
   </section>
 </section>
 
-<!-- UI tests / Application tests -->
+<!-- UI TESTS -->
 <section>
   <section>
     <h2>UI Tests</h2>
   
     <p>
-      <b>Problem:</b> How can I perform UI tests with only setting up a minimal part of the application?
+      <b>Problem:</b> How can I perform tests of the topmost application layer with only minimal configuration of the <code>express</code> app stack?
     </p>
+    <p><b>Why we care:</b> The application renders things different depending on the privileges of the current user.</p>
 
     <aside class="notes">
-      Hier die Slides für app testing.
+      We have behaviour in the topmost layer, mainly user Privileges
+    </aside>
+  </section>
+  
+  <section>
+    <h2>Example</h2>
+  
+    <ul>
+      <li>A user can only edit his/her own memberdata.</li>
+      <li>If there is no user logged in, the member module is not available at all.</li>
+      <li>The current user is part of the session and managed by a third-party module named <code>passport</code>. Authentication is done via OpenID or github.</li>
+    </ul>
+
+    <aside class="notes">
+      We have behaviour in the topmost layer, mainly user Privileges
     </aside>
   </section>
 </section>
