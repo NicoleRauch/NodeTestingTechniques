@@ -636,7 +636,13 @@ require('../../testutil/configureForTest');
     <p>
       <b>Problem:</b> How can I perform tests of the topmost application layer with only minimal configuration of the <code>express</code> app stack?
     </p>
-    <p><b>Why we care:</b> The application renders things different depending on the privileges of the current user.</p>
+    <p>
+      <b>Why we care:</b> We want to make sure the rendered html is as we want it to be. It should be easily testable because we are 100% stateless.
+    </p>
+    <p>
+      Besides, we have some middleware that injects functionality into the request / response. This functionality is needed
+      from within the templates (i18n, accessrights)
+    </p>
 
     <aside class="notes">
       We have behaviour in the topmost layer, mainly user Privileges
@@ -647,13 +653,66 @@ require('../../testutil/configureForTest');
     <h2>Example</h2>
   
     <ul>
-      <li>A user can only edit his/her own memberdata.</li>
+      <li>A user may only edit his/her own memberdata.</li>
       <li>If there is no user logged in, the member module is not available at all.</li>
       <li>The current user is part of the session and managed by a third-party module named <code>passport</code>. Authentication is done via OpenID or github.</li>
+      <li>Internationalization.</li>
     </ul>
 
     <aside class="notes">
       We have behaviour in the topmost layer, mainly user Privileges
+    </aside>
+  </section>
+  
+  <section>
+    <h2>Our Solution</h2>
+  
+    <p>
+      We create a minimal express app with the required middleware.
+    </p>
+
+    <pre class="javascript"><code data-trim contenteditable>
+app.use(i18n.handle); // internationalization
+app.use(require('express-session')({secret: 'secret', cookie: {maxAge: 10000}}));
+
+if (memberID) {
+  var Member = beans.get('member');
+  app.use(userStub({member: new Member({id: memberID})})); // a logged in user
+}
+app.use(beans.get('accessrights')); // priviliges
+app.use(beans.get('expressViewHelper')); // utilities
+app.use('/', beans.get(appName)); the module under test
+    </code></pre>
+    <aside class="notes">
+    </aside>
+  </section>
+
+  <section>
+    <h2>Mocking the logged in user</h2>
+
+    <p>userStub</p>
+    <pre class="javascript"><code data-trim contenteditable>
+module.exports = function (user) {
+  var userStub = function (req, res, next) {
+    req.user = user || {}; // for model checks
+    res.locals.user = req.user; // for jade checks
+    req.isAuthenticated = function () { return true; };
+    next();
+  };
+  return userStub;
+};
+    </code></pre>
+    <aside class="notes">
+    </aside>
+  </section>
+
+  <section>
+    <h2>BEnefits</h2>
+
+    <p>
+      We can easily set up "sub applications" for testing. Furthermore, we can tell, if and which user should be logged in.
+    </p>
+    <aside class="notes">
     </aside>
   </section>
 </section>
