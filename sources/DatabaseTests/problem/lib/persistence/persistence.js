@@ -20,10 +20,6 @@ module.exports = function (collectionName) {
       this.listByField({}, sortOrder, callback);
     },
 
-    listByIds: function (list, sortOrder, callback) {
-      this.listByField({ 'id': { $in: list } }, sortOrder, callback);
-    },
-
     listByField: function (searchObject, sortOrder, callback) {
       this.listByFieldWithOptions(searchObject, {}, sortOrder, callback);
     },
@@ -38,25 +34,30 @@ module.exports = function (collectionName) {
       });
     },
 
-    getById: function (id, callback) {
-      this.getByField({id: id}, callback);
-    },
-
-    getByField: function (fieldAsObject, callback) {
-      performInDB(function (err, db) {
-        if (err) { return callback(err); }
-        db.collection(collectionName).find(fieldAsObject).toArray(function (err, result) {
-          if (err) { return callback(err); }
-          callback(null, result[0]);
-        });
-      });
-    },
-
     drop: function (callback) {
       performInDB(function (err, db) {
         if (err) { return callback(err); }
         db.dropCollection(collectionName, function (err) {
           callback(err);
+        });
+      });
+    },
+
+    save: function (object, callback) {
+      this.update(object, object.id, callback);
+    },
+
+    update: function (object, storedId, callback) {
+      if (object.id === null || object.id === undefined) {
+        return callback(new Error('Given object has no valid id'));
+      }
+      performInDB(function (err, db) {
+        if (err) { return callback(err); }
+        var collection = db.collection(collectionName);
+        collection.update({id: storedId}, object, {upsert: true}, function (err) {
+          if (err) { return callback(err); }
+          logger.info(object.constructor.name + ' saved: ' + JSON.stringify(object));
+          callback(null);
         });
       });
     },
