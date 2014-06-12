@@ -1,0 +1,10 @@
+{
+  "activitiesApp": {"module": "./lib/activities"},
+  "activitiesService": {"module": "./lib/activities/activitiesService"},
+  "activitystore": {"module": "./lib/activities/activitystore"},
+  "activitiesPersistence": {
+    "module": "./lib/persistence/persistence",
+    "constructorArgs": { "collectionName": "activitystore" }
+  },
+  "activity": {"module": "./lib/activities/activity"}
+}
