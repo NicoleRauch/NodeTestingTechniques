@@ -1,36 +1,5 @@
-mixin visitorCount(anzahl)
-  p
-    if (anzahl === 0)
-      |  #{t('activities.no_participants')}
-    else if (anzahl === 1)
-      |  #{t('activities.one_participant')}
-    else
-      |  #{t('activities.count_participants', {count: anzahl})}
-
-
-mixin subscriptionButtons(activity, resourceName, resourceRegistrationRenderer)
-  -var result = resourceRegistrationRenderer.htmlRepresentationOf(activity, resourceName, accessrights.memberId())
-  -var btnClass = result.isWithdrawal() ? 'btn-default' : 'btn-primary'
-  if (activity.resourceNames().length === 1)
-    if (!result.representsButton())
-      | #{t(result.displayText)}
-    else
-      a(href='#{result.url}', class='btn #{btnClass}') #{t(result.displayText)}
-  else
-    form.form-horizontal
-      .form-group
-        label.control-label.col-xs-6(style='text-align: left;') #{resourceName}:
-        if (!result.representsButton())
-          span.col-xs-6.control-label(style='text-align: center;') #{t(result.displayText)}
-        else
-          a(href='#{result.url}', class='btn col-xs-6 #{btnClass}') #{t(result.displayText)}
-
 mixin activityList(activities, member)
   dl.dl-horizontal
     for activity in activities
-      dt
-        | #{activity.startMoment().format('LL')}
-      dd
-        | #{activity.groupName()}
-        | &nbsp;
-        | #{activity.title()}
+      ul
+        li #{activity.startMoment().format('LL')} - #{activity.title()}
