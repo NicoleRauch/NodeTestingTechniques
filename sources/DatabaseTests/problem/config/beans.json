@@ -6,5 +6,7 @@
     "module": "./lib/persistence/persistence",
     "constructorArgs": { "collectionName": "activitystore" }
   },
-  "activity": {"module": "./lib/activities/activity"}
+  "activity": {"module": "./lib/activities/activity"},
+
+  "misc": {"module": "./lib/commons/misc"}
 }

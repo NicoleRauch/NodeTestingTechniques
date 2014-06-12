@@ -7,10 +7,7 @@ var conf = require('nconf');
 var beans = conf.get('beans');
 var misc = beans.get('misc');
 var activitiesService = beans.get('activitiesService');
-var groupsService = beans.get('groupsService');
 var activitystore = beans.get('activitystore');
-
-var statusmessage = beans.get('statusmessage');
 
 var app = misc.expressAppIn(__dirname);
 

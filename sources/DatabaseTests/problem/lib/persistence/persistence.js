@@ -1,10 +1,7 @@
 'use strict';
 var conf = require('nconf');
-var async = require('async');
 var ourDB;
-var logger = require('winston').loggers.get('transactions');
 
-var CONFLICTING_VERSIONS = conf.get('beans').get('constants').CONFLICTING_VERSIONS;
 var DBSTATE = { OPEN: 'OPEN', CLOSED: 'CLOSED', OPENING: 'OPENING' };
 var ourDBConnectionState = DBSTATE.CLOSED;
 
@@ -55,71 +52,9 @@ module.exports = function (collectionName) {
       });
     },
 
-    mapReduce: function (map, reduce, options, callback) {
-      performInDB(function (err, db) {
-        if (err) { return callback(err); }
-        db.collection(collectionName).mapReduce(map, reduce, options, callback);
-      });
-    },
-
-    save: function (object, callback) {
-      this.update(object, object.id, callback);
-    },
-
-    update: function (object, storedId, callback) {
-      if (object.id === null || object.id === undefined) {
-        return callback(new Error('Given object has no valid id'));
-      }
-      performInDB(function (err, db) {
-        if (err) { return callback(err); }
-        var collection = db.collection(collectionName);
-        collection.update({id: storedId}, object, {upsert: true}, function (err) {
-          if (err) { return callback(err); }
-          logger.info(object.constructor.name + ' saved: ' + JSON.stringify(object));
-          callback(null);
-        });
-      });
-    },
-
-    saveWithVersion: function (object, callback) {
-      var self = this;
-      if (object.id === null || object.id === undefined) {
-        return callback(new Error('Given object has no valid id'));
-      }
-      performInDB(function (err, db) {
-        if (err) { return callback(err); }
-        var collection = db.collection(collectionName);
-        var oldVersion = object.version;
-        object.version = oldVersion ? oldVersion + 1 : 1;
-        self.getById(object.id, function (err, result) {
-          if (err) { return callback(err); }
-          if (result) { // object exists
-            collection.findAndModify({id: object.id, version: oldVersion}, [], object, {'new': true, upsert: false}, function (err, newObject) {
-              if (err) { return callback(err); }
-              if (!newObject) {
-                // something went wrong: restore old version count
-                object.version = oldVersion;
-                return callback(new Error(CONFLICTING_VERSIONS));
-              }
-              logger.info(object.constructor.name + ' found and modified: ' + JSON.stringify(object));
-              callback(null, newObject);
-            });
-          } else { // object is not yet persisted
-            self.save(object, callback);
-          }
-        });
-      });
-    },
-
-    saveAll: function (objects, outerCallback) {
-      var self = this;
-      async.each(objects, function (each, callback) { self.save(each, callback); }, outerCallback);
-    },
-
     drop: function (callback) {
       performInDB(function (err, db) {
         if (err) { return callback(err); }
-        logger.info('Drop ' + collectionName + ' called!');
         db.dropCollection(collectionName, function (err) {
           callback(err);
         });
