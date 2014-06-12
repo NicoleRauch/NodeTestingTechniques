@@ -14,20 +14,20 @@ var app = misc.expressAppIn(__dirname);
 function activitiesForDisplay(activitiesFetcher, next, res, title) {
   return activitiesService.getActivitiesForDisplay(activitiesFetcher, function (err, activities) {
     if (err) { next(err); }
-    res.render('index', { activities: activities, range: title, webcalURL: conf.get('publicUrlPrefix').replace('http', 'webcal') + '/activities/ical' });
+    res.render('index', { activities: activities, range: title });
   });
 }
 
 app.get('/', function (req, res, next) {
-  activitiesForDisplay(activitystore.allActivities, next, res, req.i18n.t('general.all'));
+  activitiesForDisplay(activitystore.allActivities, next, res, 'All');
 });
 
 app.get('/upcoming', function (req, res, next) {
-  activitiesForDisplay(activitystore.upcomingActivities, next, res, req.i18n.t('activities.upcoming'));
+  activitiesForDisplay(activitystore.upcomingActivities, next, res, 'Upcoming');
 });
 
 app.get('/past', function (req, res, next) {
-  activitiesForDisplay(activitystore.pastActivities, next, res, req.i18n.t('activities.past'));
+  activitiesForDisplay(activitystore.pastActivities, next, res, 'Past');
 });
 
 module.exports = app;
