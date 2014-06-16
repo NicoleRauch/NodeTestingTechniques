@@ -740,14 +740,18 @@ module.exports = function (user) {
     <p>
       <b>Problem:</b> How to test a database in integration?
     </p>
+  </section>  
+  
+  <section>
+    <h2>Why would we do this?</h2>
     <ul>
-      <li>We use native queries and other database features in our code.</li>
-      <li>In our test configuration, we replace the module that connects to the database by a fake.</li>
+      <li>We use native queries and other database features.</li>
     </ul>
-    
+    <br/>    
+    <p>Questions:</p>
     <ul>
-      <li>Question: How to test the database integration?</li>
-      <li>Question: How to test native queries?</li>
+      <li>How to test the native queries?</li>
+      <li>How to test the database integration?</li>
     </ul>
 
     <aside class="notes">
@@ -756,11 +760,12 @@ module.exports = function (user) {
   </section>
   
   <section>
-    <h2>DB Tests</h2>
+      <h1>?</h1>
+  </section>
+    
+  <section>
+    <h2>Our Solution</h2>
   
-    <p>
-      <b>Our Solution</b>
-    </p>
     <ul>
       <li>We set up a second test configuration where we connect to a test database (i.e. a special collection in our mongoDB).</li>
       <li>Nice: We cannot mess up production data even if we run the tests on the production system.</li>
