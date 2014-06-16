@@ -5,7 +5,6 @@ var conf = require('nconf');
 module.exports = function redirectIfNotSuperuser(req, res, next) {
   var startsWithAdministration = /^\/administration\//;
   var originalUrl = req.originalUrl;
-  var user = req.user;
 
   if (startsWithAdministration.test(originalUrl)) {
     if (!res.locals.accessrights.isSuperuser()) {
