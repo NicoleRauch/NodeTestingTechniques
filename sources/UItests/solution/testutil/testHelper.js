@@ -10,8 +10,8 @@ module.exports = function (internalAppName, configuredBeans) {
   var beans = configuredBeans || require('./configureForTest').get('beans');
 
   i18n.init({
-    supportedLngs: ['de'],
-    preload: ['de'],
+    supportedLngs: ['de', 'en'],
+    preload: ['de', 'en'],
     fallbackLng: 'de',
     resGetPath: 'locales/__ns__-__lng__.json'
   });
