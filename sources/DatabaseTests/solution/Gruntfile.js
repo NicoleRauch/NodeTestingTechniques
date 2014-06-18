@@ -3,6 +3,14 @@ module.exports = function (grunt) {
 
   grunt.initConfig({
     mocha_istanbul: {
+      testWithDB: {
+        src: 'testWithDB', // the folder, not the files,
+        options: {
+          root: 'testWithDB', // to make istanbul _not instrument_ our production code
+          mask: '**/*.js',
+          reporter: 'dot' // set to 'spec' if you like it more verbose
+        }
+      },
       test: {
         src: 'test', // the folder, not the files,
         options: {

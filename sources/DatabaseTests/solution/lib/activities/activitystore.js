@@ -46,6 +46,10 @@ module.exports = {
     var start = 0;
     var end = moment().unix();
     allActivitiesByDateRangeInDescendingOrder(start, end, callback);
+  },
+
+  saveActivity: function (activity, callback) {
+    persistence.save(activity.state, callback);
   }
 
 };
