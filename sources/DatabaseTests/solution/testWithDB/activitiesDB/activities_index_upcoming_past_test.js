@@ -49,9 +49,14 @@ describe('Activity application with DB - shows activities -', function () {
     sinon.restore();
   });
 
-  it('shows only current and future activities as upcoming', function (done) {
+  var expressApp;
 
-    request(createApp())
+  before(function(){
+    expressApp = request(createApp());
+  });
+
+  it('shows only current and future activities as upcoming', function (done) {
+    expressApp
       .get('/upcoming')
       .expect(200)
       .expect(/Current Activity/)
@@ -62,8 +67,7 @@ describe('Activity application with DB - shows activities -', function () {
   });
 
   it('shows only past activities as past', function (done) {
-
-    request(createApp())
+    expressApp
       .get('/past')
       .expect(200)
       .expect(/Past Activity/, function (err, res) {

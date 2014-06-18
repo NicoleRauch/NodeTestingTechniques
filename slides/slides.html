@@ -97,10 +97,8 @@
       <h2>Workshop Agenda</h2>
       <ul>
         <li>We present a problem we ran into</li>
-        <li>We give you some time to think about possible solutions</li>
-            <ul>
-              <li>Please work in pairs or triples</li>
-            </ul>
+        <li>We provide a minimal exampe</li>
+        <li>Think about possible solutions (in pairs or triples)</li>
         <li>We discuss your ideas</li>
         <li>We present our current solution</li>
       </ul>
@@ -772,17 +770,60 @@ module.exports = function (user) {
     </ul>
     
     <aside class="notes">
-      <p>This is our configuration for tests with DB:</p>
-      <p>https://github.com/softwerkskammer/Agora/blob/master/testutil/configureForTestWithDB.js</p>
-      <p>It uses the following beans definitions for the modules that connect to the database:</p>
-      <p>https://github.com/softwerkskammer/Agora/blob/master/config/testbeansWithDB.json</p>
-      <p>So far, only groupsPersistence, activitiesPersistence and sympaPersistence are being connected to the database; the others still point to the persistence fake because there are currently no integration tests for them.</p>
-      
-      <p>The actual database tests are now pretty straightforward:</p>
-      <p>https://github.com/softwerkskammer/Agora/blob/master/testWithDB/activitiesDB/activities_index_upcoming_past_test.js</p>
-      <p>In the setup, clear the database, persist the desired objects, run the test and check the results.</p>
-
     </aside>
+  </section>
+    
+  <section>
+    Our configuration for tests with DB:
+    <pre class="javascript"><code data-trim contenteditable>
+module.exports = require('./abstractConfigureForTest')('testbeansWithDB.json');
+    </code></pre>
+      The modified beans definitions in <code>testbeansWithDB.json</code>:
+    <pre class="javascript"><code data-trim contenteditable>
+{
+  "activitiesPersistence": {"module": "./lib/persistence/persistence",
+    "constructorArgs": {
+      "collectionName": "teststore"
+    }}
+}
+    </code></pre>
+  </section>
+
+  <section>
+    The actual database tests are now pretty straightforward:
+      
+      The setup clears the database and persists the desired objects:
+    <pre class="javascript"><code data-trim contenteditable>
+    persistence.drop(function () {
+      activitystore.saveActivity(futureActivity, function (err) {
+        if (err) { done(err); }
+        activitystore.saveActivity(currentActivity, function (err) {
+          if (err) { done(err); }
+          activitystore.saveActivity(pastActivity, function (err) {
+            done(err);
+    // ...
+    </code></pre>
+
+      The tests:
+    <pre class="javascript"><code data-trim contenteditable>
+it('shows only current and future activities as upcoming', function (done) {
+  expressApp.get('/upcoming')
+    .expect(/Current Activity/)
+    .expect(/Future Activity/, function (err, res) {
+      expect(res.text).to.not.contain('Past Activity');
+      done(err);
+    });
+});
+
+it('shows only past activities as past', function (done) {
+  expressApp.get('/past')
+    .expect(/Past Activity/, function (err, res) {
+      expect(res.text).to.not.contain('Current Activity');
+      expect(res.text).to.not.contain('Future Activity');
+      done(err);
+    });
+});
+    </code></pre>
   </section>
 </section>
 
