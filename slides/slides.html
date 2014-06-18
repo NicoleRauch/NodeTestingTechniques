@@ -825,6 +825,16 @@ it('shows only past activities as past', function (done) {
 });
     </code></pre>
   </section>
+    
+  <section>
+    <h2>Drawback: Overall Coverage</h2>
+
+    <p>
+      <b>Problem:</b> Now we have two different test runs that both measure coverage.<br/> 
+        How can we get to an overall coverage?
+    </p>
+  </section>
+
 </section>
 
 <!-- RACE CONDITIONS -->
@@ -908,6 +918,19 @@ it('shows only past activities as past', function (done) {
       Hier die Slides.
     </aside>
   </section>
+    
+<section>
+    <h2>Drawback: Coverage Instrumentation</h2>
+
+    <p>
+      <b>Problem:</b> Coverage tool instruments all code, even those bits that are run inside MongoDB. This does not work because MongoDB does not know about instrumented code.
+    </p>
+
+    <aside class="notes">
+      Hier die Slides.
+    </aside>
+  </section>
+
 </section>
 
 <!-- DOM tests-->
@@ -1067,33 +1090,6 @@ jade: {
     <h1>CODE</h1>
   </section>
 
-</section>
-
-<!-- coverage tests-->
-<section>
-  <section>
-    <h2>Coverage Instrumentation</h2>
-
-    <p>
-      <b>Problem:</b> Coverage measure instruments all code, even if it is run inside the mongodb. Thus breaking it.
-    </p>
-
-    <aside class="notes">
-      Hier die Slides.
-    </aside>
-  </section>
-  
-  <section>
-    <h2>Overall Coverage</h2>
-
-    <p>
-      <b>Problem:</b> We have different test runs that all measure coverage. How can we get an overall coverage?
-    </p>
-
-    <aside class="notes">
-      Hier die Slides.
-    </aside>
-  </section>
 </section>
 
 <!-- Thank You -->
