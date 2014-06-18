@@ -56,7 +56,6 @@ module.exports = function (collectionName) {
         var collection = db.collection(collectionName);
         collection.update({id: storedId}, object, {upsert: true}, function (err) {
           if (err) { return callback(err); }
-          logger.info(object.constructor.name + ' saved: ' + JSON.stringify(object));
           callback(null);
         });
       });
