@@ -1,0 +1,5 @@
+mixin activityList(activities, member)
+  dl.dl-horizontal
+    for activity in activities
+      ul
+        li #{activity.startMoment().format('LL')} - #{activity.title()}
