@@ -63,7 +63,7 @@
 
   <h3>Interesting and Helpful Techniques</h3>
 
-  <p>By Nicole Rauch and Andreas Leidig</p>
+  <p>Nicole Rauch and Andreas Leidig</p>
 </section>
 
 <!-- CONTEXT -->
@@ -94,48 +94,102 @@
   </section>
 </section>
     
-<!-- This Workshop -->
+<!-- AGENDA This Workshop -->
 <section>
   <section>
-      <h2>Workshop Agenda</h2>
-      <ul>
-        <li>We present a problem we ran into</li>
-        <li>We provide a minimal exampe</li>
-        <li>Think about possible solutions (in pairs or triples)</li>
-        <li>We discuss your ideas</li>
-        <li>We present our current solution</li>
-      </ul>
+    <h2>Workshop Agenda</h2>
+    <ul>
+      <li>We present a problem we ran into</li>
+      <li>We provide a minimal example</li>
+      <li>Think about possible solutions (in pairs or triples)</li>
+      <li>We discuss your ideas</li>
+      <li>We present our current solution</li>
+    </ul>
   </section>
     
-    <section>
-    <h2>Please ...</h2>
-      <ul>
-        <li>Most examples are tiny and minimalist</li>
-        <li>(and it was hard to get them so small!)</li>
-        <li>Please, no discussions about overengineered solutions to trivial problems</li>
-        <li>We can show you the original code if you like...</li>
-      </ul>
+  <section>
+    <h2>Please &hellip;</h2>
+    <ul>
+      <li>Most examples are tiny and minimalist<br>
+      <i>and it was hard to get them so small!</i></li>
+      <li>Please, no discussions about overengineered solutions to trivial problems</li>
+      <li>We can show you the original code if you like&hellip;</li>
+    </ul>
   </section>
 
   <section>
     <h2>Mechanics</h2>
-      <ul>
-        <li>Problems are available in sourcecode</li>
-        <li>Code is executable, tests can be run</li>
-        <li>You can try out your ideas in the code</li>
-        <li>Solutions are available in sourcecode as well</li>
-        <li>If you cheat, please be silent in discussions</li>
-      </ul>
+    <ul>
+      <li>Problems are available in sourcecode</li>
+      <li>Code is executable, tests can be run</li>
+      <li>You can try out your ideas in the code</li>
+      <li>Solutions are available in sourcecode as well</li>
+      <li>If you cheat, please be silent in discussions</li>
+    </ul>
   </section>
 
   <section>
-      <h2>Laptop Setup Time</h2>
-      <p>
+    <h2>Laptop Setup Time</h2>
+    <p>
       Clone <code>https://github.com/NicoleRauch/NodeTestingTechniques</code>
-      </p>
-      <p>
+    </p>
+    <p>
       Or copy the VM from an USB stick
-      </p>
+    </p>
+  </section>
+</section>
+
+<!-- VARIOUS TESTING NEEDS -->
+<section>
+  <section>
+    <h2>Testing Needs</h2>
+    <p>
+      <b>Problem:</b> The application requires different testing techniques depending on the level of testing. How to adapt to various testing needs?
+    </p>
+  </section>
+
+  <section>
+    <h2>One Language &ndash; One Kind of Tests?</h2>
+    <p>Not quite. We have different aspects and runtime environments.</p>
+    <ul>
+      <li>Simple node.js unit tests.</li>
+      <li>Integrated express.js unit tests.</li>
+      <li>Integrated tests with a running app (smoke tests).</li>
+      <li>Tests against a real <code>mongodb</code>.</li>
+      <li>Tests for frontend code.</li>
+      <li>UI tests.</li>
+    </ul>
+
+    <aside class="notes">
+      First it felt strange to use different frameworks on the backend. But they are all in BDD style.
+    </aside>
+  </section>
+
+  <section>
+    <h2>Frameworks we use</h2>
+    <p>All tests have the style in common. They all are written in BDD style.</p>
+    <ul>
+      <li><code>Mocha</code> with <code>must</code> on the backend. These tests resemble <code>Jasmine</code> tests.</li>
+      <li><code>supertest</code> to easily test <code>express</code> applications without starting the server.</li>
+      <li><code>request</code> for integrative smoke tests.</li>
+      <li><code>Jasmine</code> with <code>karma</code> for the frontend tests</li>
+    </ul>
+
+    <aside class="notes">
+      Most test are based on mocha. The supertest / request tests are rather slow
+    </aside>
+  </section>
+
+  <section>
+    <h2>Patterns we use</h2>
+    <ul>
+      <li>Configure the database tests differently from the standard tests.</li>
+      <li>Use test-only <code>express</code> middleware to emulate production behaviour.</li>
+    </ul>
+
+    <aside class="notes">
+      Middleware for user fakes.
+    </aside>
   </section>
 </section>
 
@@ -576,60 +630,6 @@ require('../../testutil/configureForTest');
 
     <aside class="notes">
       Database / 3rd party services / files
-    </aside>
-  </section>
-</section>
-
-<!-- VARIOUS TESTING NEEDS -->
-<section>
-  <section>
-    <h2>Testing Needs</h2>
-    <p>
-      <b>Problem:</b> The application requires different testing techniques depending on the level of testing. How to adapt to various testing needs?
-    </p>
-  </section>
-
-  <section>
-    <h2>One Language - One Kind of Tests?</h2>
-    <p>Not quite. We have different aspects and runtime environments.</p>
-    <ul>
-      <li>Simple node.js unit tests.</li>
-      <li>Integrated express.js unit tests.</li>
-      <li>Integrated tests with a running app (smoke tests).</li>
-      <li>Tests against a real <code>mongo db</code>.</li>
-      <li>Tests for frontend code.</li>
-      <li>UI tests.</li>
-    </ul>
-
-    <aside class="notes">
-      First it felt strange to use different frameworks on the backend. But they are all in BDD style.
-    </aside>
-  </section>
-
-  <section>
-    <h2>Frameworks we use</h2>
-    <p>All tests have the style in common. They all are written in BDD style.</p>
-    <ul>
-      <li><code>Mocha</code> with <code>must</code> on the backend. These tests resemble <code>Jasmine</code> tests.</li>
-      <li><code>supertest</code> to easily test <code>express</code> applications without starting the server.</li>
-      <li><code>request</code> for integrative smoke tests.</li>
-      <li><code>Jasmine</code> with <code>karma</code> for the frontend tests</li>
-    </ul>
-
-    <aside class="notes">
-      Most test are based on mocha. The supertest / request tests are rather slow 
-    </aside>
-  </section>
-
-  <section>
-    <h2>Patterns we use</h2>
-    <ul>
-      <li>Configure the database tests differently from the standard tests.</li>
-      <li>Use test-only <code>express</code> middleware to emulate production behaviour.</li>
-    </ul>
-
-    <aside class="notes">
-      Middleware for user fakes. 
     </aside>
   </section>
 </section>
