@@ -57,6 +57,7 @@
 
 <!-- Any section element inside of this container is displayed as a slide -->
 <div class="slides">
+
 <!-- Title page -->
 <section style="text-align: center">
   <h1>Testing in node.js</h1>
@@ -131,10 +132,10 @@
   <section>
     <h2>Laptop Setup Time</h2>
     <p>
-      Clone <code>https://github.com/NicoleRauch/NodeTestingTechniques</code>
+      Clone <code>https://github.com/NicoleRauch/NodeTestingTechniques</code> and follow the instructions from the readme.
     </p>
     <p>
-      Or copy the VM from an USB stick
+      Or copy the VM from an USB stick - we will give you sticks in a second.
     </p>
   </section>
 </section>
@@ -144,7 +145,10 @@
   <section>
     <h2>Testing Needs</h2>
     <p>
-      <b>Problem:</b> The application requires different testing techniques depending on the level of testing. How to adapt to various testing needs?
+      <b>Problem:</b> We want to test different aspects of the application.
+    </p>
+    <p>There are good libraries out there. 
+      Which one should we choose? - These libraries have different trade-offs and abilities. How to adapt to various testing needs?
     </p>
   </section>
 
@@ -157,11 +161,11 @@
       <li>Integrated tests with a running app (smoke tests).</li>
       <li>Tests against a real <code>mongodb</code>.</li>
       <li>Tests for frontend code.</li>
-      <li>UI tests.</li>
+      <li>HTML tests.</li>
     </ul>
 
     <aside class="notes">
-      First it felt strange to use different frameworks on the backend. But they are all in BDD style.
+      First it felt strange to use different frameworks even on the backend. But they are all in BDD style.
     </aside>
   </section>
 
@@ -180,14 +184,14 @@
     </aside>
   </section>
 
-  <section>
-    <h2>Patterns we use</h2>
-    <ul>
-      <li>Configure the database tests differently from the standard tests.</li>
-      <li>Use test-only <code>express</code> middleware to emulate production behaviour.</li>
-    </ul>
-
+  <section style="text-align: center">
+    <p>This workshop focuses on</p>
+    <h1>Patterns we use</h1>
     <aside class="notes">
+      <ul>
+        <li>Configure the database tests differently from the standard tests.</li>
+        <li>Use test-only <code>express</code> middleware to emulate production behaviour.</li>
+      </ul>
       Middleware for user fakes.
     </aside>
   </section>
