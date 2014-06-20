@@ -229,13 +229,13 @@
     </aside>
   </section>
     
-  <section>
+  <section style="text-align: center">
     <h2>Application Structure</h2>
       <img src="pics/MembersModule.svg">
   </section>
     
   <section>
-    index.js:
+    <h4>index.js:</h4>
     <pre class="javascript"><code data-trim contenteditable>
 var service = require('./membersService');
 
@@ -246,7 +246,7 @@ app.get('/', function (req, res, next) {
 });
     </code></pre>
       
-      membersService.js:
+    <h4>membersService.js:</h4>
     <pre class="javascript"><code data-trim contenteditable>
 var store = require('./memberstore');
 
@@ -257,7 +257,7 @@ module.exports = {
 };
     </code></pre>
       
-      memberstore.js:
+    <h4>memberstore.js:</h4>
     <pre class="javascript"><code data-trim contenteditable>
 var persistence = require('../persistence/persistence')('memberstore');
 
@@ -267,52 +267,52 @@ module.exports = {
   }
 };
     </code></pre>
-    </section>  
+
+    <aside class="notes">
+      This code is massively simplified.
+    </aside>
+
+  </section>  
     
-    <section>
-      <h2>Unit and Integration Tests</h2>
-        <p>
-        Stubbing allows to isolate one or several modules
-        </p>
-        <img src="pics/MembersModule.svg" width="60%">
-        <p>
-        But how?
-        </p>
-        
+  <section style="text-align: center">
+    <h2>Unit and Integration Tests</h2>
+    <p>Stubbing allows to isolate one or several modules</p>
+    <img src="pics/MembersModule.svg" width="60%">
+    <p>But how?</p>
+      
     <aside class="notes">
       (attention! why would we want to do this?)
     </aside>
 
-    </section>
+  </section>
     
-    <section>
-      <p>
-      <b>Interesting:</b> <code>require</code> promises a singleton module
-      </p>
-      <p>
-      <b>BUT:</b> <code>require</code> creates one singleton per import path!
-      </p><br/>
-      In production:
-        <pre class="javascript"><code data-trim contenteditable>
+  <section>
+    <h2>"require" of node.js</h2>
+    <p><b>Interesting:</b> <code>require</code> promises to instantiate singleton modules</p>
+    <p><b>But:</b> <code>require</code> creates <i>one</i> singleton <i>per import path</i>!</p>
+    <br>
+    <p>In production (in folder <code>'lib'</code>):</p>
+    <pre class="javascript"><code data-trim contenteditable>
 var service = require('./membersService');        
-        </code></pre>
-
-      In test:
-        <pre class="javascript"><code data-trim contenteditable>
+    </code></pre>
+    <p>In test (in folder <code>'test'</code>):</p>
+    <pre class="javascript"><code data-trim contenteditable>
 var service = require('../../lib/members/membersService');        
-        </code></pre>
-      <br/>
-      Two different instances!
-    </section>  
+    </code></pre>
+    <br/>
+    <p><b>Result:</b> Two different instances!</p>
+
+    <aside class="notes">
+      see http://nodejs.org/api/modules.html
+    </aside>
+  </section>  
         
-    <section>
-        <h2>Proxyquire</h2>
-        <p>
-        Replaces a <code>require</code>d module inside a module.
-        </p>
-        <br/>
-        Sounds great - let's try this out!
-    </section>
+  <section>
+    <h2>Proxyquire</h2>
+    <p>Can replace a <code>require</code>d module inside a module.</p>
+    <br/>
+    <p>Sounds great - let's try this out!</p>
+  </section>
     
     <section>
       <h2>Unit Testing index.js</h2>
