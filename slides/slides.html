@@ -300,7 +300,7 @@ var service = require('./membersService');
 var service = require('../../lib/members/membersService');        
     </code></pre>
     <br/>
-    <p><b>Result:</b> Two different instances!</p>
+    <p><b>Result:</b> Two different instances of <code>membersService</code>! Stubbing not simple.</p>
 
     <aside class="notes">
       see http://nodejs.org/api/modules.html
@@ -311,12 +311,13 @@ var service = require('../../lib/members/membersService');
     <h2>Proxyquire</h2>
     <p>Can replace a <code>require</code>d module inside a module.</p>
     <br/>
-    <p>Sounds great - let's try this out!</p>
+    <p><i>Sounds great &ndash; let's try this out!</i></p>
   </section>
     
-    <section>
-      <h2>Unit Testing index.js</h2>
-        <pre class="javascript"><code data-trim contenteditable>
+  <section>
+    <h2>Unit Testing index.js</h2>
+    <p>Single-layer test:</p>
+    <pre class="javascript"><code data-trim contenteditable>
 var membersServiceStub = {
   allMembers: function (callback) {
     callback(null, [testMember]);
@@ -332,19 +333,19 @@ it('lists all members', function (done) {
     .get('/')
     .expect(/Peter Miller \(Nickinick\)/, done);
 });        
-        </code></pre>
-        
+    </code></pre>
+
     <aside class="notes">
       So if we just test one module, we are fine:
       
       But if we test two modules in integration, things get slightly more complicated:
     </aside>
-    </section>
+  </section>
     
-    <section>
-      <h2>Integration Testing</h2>
-        Integrating 2 layers:
-        <pre class="javascript"><code data-trim contenteditable>
+  <section>
+    <h2>Integration Testing</h2>
+    <p>Two-layer test:</p>
+    <pre class="javascript"><code data-trim contenteditable>
 var memberstoreStub = {
   allMembers: function (callback) {
     callback(null, [testMember]);
@@ -364,12 +365,13 @@ it('lists all members', function (done) {
     .get('/')
     .expect(/Peter Miller \(Nickinick\)/, done);
 });        
-        </code></pre>
-    </section>
+    </code></pre>
+  </section>
   
-    <section>
-        Integrating 3 layers:
-        <pre class="javascript"><code data-trim contenteditable>
+  <section>
+    <h2>Integration Testing</h2>
+    <p>Three-layer test:</p>
+    <pre class="javascript"><code data-trim contenteditable>
 var persistenceStub = function () {
   return {
     list: function (sortOrder, callback) {
@@ -393,45 +395,42 @@ it('lists all members', function (done) {
     .get('/')
     .expect(/Peter Miller \(Nickinick\)/, done);
 });        
-        </code></pre>
-    </section>
+    </code></pre>
+  </section>
   
-  <section>
-      <h2>What would be a better solution?</h2>
-      Try out
-      Discuss
+  <section style="text-align: center;">
+    <h2>What would be a better solution?</h2>
+    <p>&nbsp;</p>
+    <div class="fragment">
+      <h3>Try out</h3>
+      <h3>Discuss</h3>
+    </div>
   </section>
     
-    <section>
-        <h2>Our Solution</h2>
-        We decided to use...
-    </section>
+  <section style="text-align: center;">
+    <h2>Our Solution</h2>
+    We decided to use&hellip;
+    <p>&nbsp;</p>
+    <h2 class="fragment">Dependency Injection</h2>
+  </section>
 
-    <section>
-        <h2>Dependency Injection</h2>
-    </section>
-
-    <section>
-        <p>
-        We use a framework called <code>CoolBeans</code>.
-        </p>
-        <br/>
-        We define our singleton beans:
-        <pre class="javascript"><code data-trim contenteditable>
+  <section>
+    <h2>Dependency Injection</h2>
+    <p>We use a framework called <code>CoolBeans</code>.</p>
+    <p>We define our singleton beans:</p>
+    <pre class="javascript"><code data-trim contenteditable>
 {
   "membersApp": {"module": "./lib/members"},
   "membersService": {"module": "./lib/members/membersService"},
   "memberstore": {"module": "./lib/members/memberstore"},
-  "membersPersistence": {
-    "module": "./lib/persistence/persistence",
-    "constructorArgs": { "collectionName": "memberstore" }
-  },
+  "membersPersistence": {"module"         : "./lib/persistence/persistence",
+                         "constructorArgs": { "collectionName": "memberstore" }},
   "member": {"module": "./lib/members/member"}
 }
-        </code></pre>
-        
-        We plug them into nconf:
-        <pre class="javascript"><code data-trim contenteditable>
+    </code></pre>
+    
+    <p>We plug them into nconf:</p>
+    <pre class="javascript"><code data-trim contenteditable>
 function createConfiguration() {
   nconf.defaults({
     // ...
@@ -439,49 +438,44 @@ function createConfiguration() {
   });
   return nconf;
 }
-        </code></pre>
-        
-    </section>
-    
-    <section>
-        And use them in production:
-        <pre class="javascript"><code data-trim contenteditable>
+    </code></pre>
+    <p>And use them in production and test:</p>
+    <pre class="javascript"><code data-trim contenteditable>
 var service = require('nconf').get('beans').get('membersService');
-        </code></pre>
-        
-        and test:
-        <pre class="javascript"><code data-trim contenteditable>
-var service = require('../../configure').get('beans').get('membersService');
-        </code></pre>
-        
-        Stubbing for a single layer test:
-        <pre class="javascript"><code data-trim contenteditable>
-  beforeEach(function () {
-    sinon.stub(membersService, 'allMembers', function (callback) {
-      callback(null, [testMember]);
-    });
+    </code></pre>
+  </section>
+    
+  <section>
+    <h2>Cool Beans</h2>
+    <p>The resulting stubbing code is much simpler:</p>
+    <p>Single-layer test:</p>
+    <pre class="javascript"><code data-trim contenteditable>
+beforeEach(function () {
+  sinon.stub(membersService, 'allMembers', function (callback) {
+    callback(null, [testMember]);
   });
-        </code></pre>
+});
+    </code></pre>
         
-        Stubbing for a two-layer test:
-        <pre class="javascript"><code data-trim contenteditable>
-  beforeEach(function () {
-    sinon.stub(memberstore, 'allMembers', function (callback) {
-      callback(null, [testMember]);
-    });
+    <p>Two-layer test:</p>
+    <pre class="javascript"><code data-trim contenteditable>
+beforeEach(function () {
+  sinon.stub(memberstore, 'allMembers', function (callback) {
+    callback(null, [testMember]);
   });
-        </code></pre>
-        
-        Stubbing for a three-layer test:
-        <pre class="javascript"><code data-trim contenteditable>
-  beforeEach(function () {
-    sinon.stub(membersPersistence, 'list', function (sortOrder, callback) {
-      callback(null, [testMember]);
-    });
+});
+    </code></pre>
+    
+    <p>Three-layer test:</p>
+    <pre class="javascript"><code data-trim contenteditable>
+beforeEach(function () {
+  sinon.stub(membersPersistence, 'list', function (sortOrder, callback) {
+    callback(null, [testMember]);
   });
-        </code></pre>
+});
+    </code></pre>
         
-    </section>
+  </section>
 
 </section>
 
