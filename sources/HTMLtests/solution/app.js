@@ -60,11 +60,7 @@ module.exports = {
 
     app.use('/', beans.get('siteApp'));
     useApp(app, 'members', beans.get('membersApp'));
-    useApp(app, 'announcements', beans.get('announcementsApp'));
     useApp(app, 'auth', beans.get('authenticationApp'));
-
-    app.use(beans.get('handle404')());
-    app.use(beans.get('handle500')());
 
     i18n.registerAppHelper(app);
     i18n.addPostProcessor('jade', function (val, key, opts) {

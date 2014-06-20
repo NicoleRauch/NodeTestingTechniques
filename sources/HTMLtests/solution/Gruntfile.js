@@ -110,11 +110,7 @@ module.exports = function (grunt) {
         options: {
           root: 'lib',
           mask: '**/*.js',
-          reporter: 'dot', // set to 'spec' if you like it more verbose
-          check: {
-            lines: 78,
-            statements: 74
-          }
+          reporter: 'dot' // set to 'spec' if you like it more verbose
         }
       }
     },

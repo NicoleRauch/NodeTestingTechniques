@@ -1,25 +1,17 @@
 {
-  "announcementsApp": {"module": "./lib/announcements"},
   "authenticationApp": {"module": "./lib/authentication"},
   "membersApp": {"module": "./lib/members"},
   "siteApp": {"module": "./lib/site"},
 
-  "announcementsAPI": {"module": "./lib/announcements/announcementsAPI"},
   "membersAPI": {"module": "./lib/members/membersAPI"},
 
-  "announcementstore": {"module": "./lib/announcements/announcementstore"},
   "memberstore": {"module": "./lib/members/memberstore"},
 
-  "announcementsPersistence": {
-    "module": "./lib/persistence/persistence",
-    "constructorArgs": { "collectionName": "announcementstore" }
-  },
   "membersPersistence": {
     "module": "./lib/persistence/persistence",
     "constructorArgs": { "collectionName": "memberstore" }
   },
   
-  "announcement": {"module": "./lib/announcements/announcement"},
   "member": {"module": "./lib/members/member"},
 
   "constants": {"module": "./lib/commons/constants"},
@@ -31,8 +23,6 @@
   "accessrights": {"module": "./lib/middleware/accessrights"},
   "expressSessionConfigurator": {"module": "./lib/middleware/expressSessionConfigurator"},
   "expressViewHelper": {"module": "./lib/middleware/expressViewHelper"},
-  "handle404": {"module": "./lib/middleware/handle404"},
-  "handle500": {"module": "./lib/middleware/handle500"},
   "secureByLogin": {"module": "./lib/middleware/secureByLogin"},
   "secureSuperuserOnly": {"module": "./lib/middleware/secureSuperuserOnly"},
   "serverpathRemover": {"module": "./lib/middleware/serverpathRemover"}
