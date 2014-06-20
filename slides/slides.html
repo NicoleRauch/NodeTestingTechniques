@@ -28,26 +28,22 @@
     .reveal .slides {
       text-align: left;
     }
-    .reveal h1 {
+    .reveal h1, h2, h3, h4 {
       text-align: center;
     }
-    .reveal h2 {
-      text-align: center;
+    .reveal h5, h6 {
+      text-transform: none !important;
+      margin: 20px 0 0 0 !important;
     }
-    .reveal h3 {
-      text-align: center;
+    .reveal pre {
+      width: 100%;
+      margin: 5px 0 0 0;
+      text-align: left;
+      font-size: .55em;
+      font-family: monospace;
+      line-height: 1.2em;
+      box-shadow: 0 0 6px rgba(0,0,0,.3);
     }
-    .reveal h4 {
-      text-align: center;
-    }
-    .reveal h5 {
-      text-align: center;
-    }
-    .reveal h6 {
-      text-align: center;
-    }
-
-
   </style>
 
   <!-- For syntax highlighting -->
@@ -235,7 +231,7 @@
   </section>
     
   <section>
-    <h4>index.js:</h4>
+    <h6>index.js:</h6>
     <pre class="javascript"><code data-trim contenteditable>
 var service = require('./membersService');
 
@@ -246,7 +242,7 @@ app.get('/', function (req, res, next) {
 });
     </code></pre>
       
-    <h4>membersService.js:</h4>
+    <h6>membersService.js:</h6>
     <pre class="javascript"><code data-trim contenteditable>
 var store = require('./memberstore');
 
@@ -257,7 +253,7 @@ module.exports = {
 };
     </code></pre>
       
-    <h4>memberstore.js:</h4>
+    <h6>memberstore.js:</h6>
     <pre class="javascript"><code data-trim contenteditable>
 var persistence = require('../persistence/persistence')('memberstore');
 
@@ -291,11 +287,11 @@ module.exports = {
     <p><b>Interesting:</b> <code>require</code> promises to instantiate singleton modules</p>
     <p><b>But:</b> <code>require</code> creates <i>one</i> singleton <i>per import path</i>!</p>
     <br>
-    <p>In production (in folder <code>'lib'</code>):</p>
+    <h6>In production (in folder <code>'lib'</code>):</h6>
     <pre class="javascript"><code data-trim contenteditable>
 var service = require('./membersService');        
     </code></pre>
-    <p>In test (in folder <code>'test'</code>):</p>
+    <h6>In test (in folder <code>'test'</code>):</h6>
     <pre class="javascript"><code data-trim contenteditable>
 var service = require('../../lib/members/membersService');        
     </code></pre>
@@ -316,7 +312,7 @@ var service = require('../../lib/members/membersService');
     
   <section>
     <h2>Unit Testing index.js</h2>
-    <p>Single-layer test:</p>
+    <h6>Single-layer test:</h6>
     <pre class="javascript"><code data-trim contenteditable>
 var membersServiceStub = {
   allMembers: function (callback) {
@@ -344,7 +340,7 @@ it('lists all members', function (done) {
     
   <section>
     <h2>Integration Testing</h2>
-    <p>Two-layer test:</p>
+    <h6>Two-layer test:</h6>
     <pre class="javascript"><code data-trim contenteditable>
 var memberstoreStub = {
   allMembers: function (callback) {
@@ -370,7 +366,7 @@ it('lists all members', function (done) {
   
   <section>
     <h2>Integration Testing</h2>
-    <p>Three-layer test:</p>
+    <h6>Three-layer test:</h6>
     <pre class="javascript"><code data-trim contenteditable>
 var persistenceStub = function () {
   return {
@@ -417,7 +413,7 @@ it('lists all members', function (done) {
   <section>
     <h2>Dependency Injection</h2>
     <p>We use a framework called <code>CoolBeans</code>.</p>
-    <p>We define our singleton beans:</p>
+    <h6>We define our singleton beans:</h6>
     <pre class="javascript"><code data-trim contenteditable>
 {
   "membersApp": {"module": "./lib/members"},
@@ -429,7 +425,7 @@ it('lists all members', function (done) {
 }
     </code></pre>
     
-    <p>We plug them into nconf:</p>
+    <h6>We plug them into nconf:</h6>
     <pre class="javascript"><code data-trim contenteditable>
 function createConfiguration() {
   nconf.defaults({
@@ -439,7 +435,7 @@ function createConfiguration() {
   return nconf;
 }
     </code></pre>
-    <p>And use them in production and test:</p>
+    <h6>And use them in production and test:</h6>
     <pre class="javascript"><code data-trim contenteditable>
 var service = require('nconf').get('beans').get('membersService');
     </code></pre>
@@ -448,7 +444,7 @@ var service = require('nconf').get('beans').get('membersService');
   <section>
     <h2>Cool Beans</h2>
     <p>The resulting stubbing code is much simpler:</p>
-    <p>Single-layer test:</p>
+    <h6>Single-layer test:</h6>
     <pre class="javascript"><code data-trim contenteditable>
 beforeEach(function () {
   sinon.stub(membersService, 'allMembers', function (callback) {
@@ -457,7 +453,7 @@ beforeEach(function () {
 });
     </code></pre>
         
-    <p>Two-layer test:</p>
+    <h6>Two-layer test:</h6>
     <pre class="javascript"><code data-trim contenteditable>
 beforeEach(function () {
   sinon.stub(memberstore, 'allMembers', function (callback) {
@@ -466,7 +462,7 @@ beforeEach(function () {
 });
     </code></pre>
     
-    <p>Three-layer test:</p>
+    <h6>Three-layer test:</h6>
     <pre class="javascript"><code data-trim contenteditable>
 beforeEach(function () {
   sinon.stub(membersPersistence, 'list', function (sortOrder, callback) {
@@ -530,19 +526,19 @@ beforeEach(function () {
   <section>
     <h3>EXAMPLE</h3>
     
-    <h4>configure.js</h4>
+    <h6>configure.js</h6>
     <pre class="javascript"><code data-trim contenteditable>
 var nconf = require('nconf');
 nconf.file('superusers', './config/superusers.json');
 module.exports = nconf;
     </code></pre>
 
-    <h4>superusers.json</h4>
+    <h6>superusers.json</h6>
     <pre class="javascript"><code data-trim contenteditable>
 { "superuser" : ["Balli","Rums"] }
     </code></pre>
 
-    <h4>usage</h4>
+    <h6>usage</h6>
     <pre class="javascript"><code data-trim contenteditable>
 // index.js
 res.render('index', { members: members, superusers: require('nconf').get('superuser') });
@@ -552,7 +548,7 @@ if (superusers.indexOf(member.nickname) > -1)
   |  is a SUPERUSER
     </code></pre>
     
-    <h4>test setup</h4>
+    <h6>test setup</h6>
     <pre class="javascript"><code data-trim contenteditable>
 beforeEach(function (done) {
   nconf.set('superuser', 'Charli', function () {  done(); });
@@ -584,15 +580,14 @@ beforeEach(function (done) {
     <h2>Our solution</h2>
 
     <p>We use <code>nconf.overrides()</code> function for that to provide a standardised test setup.</p>
-
+    <h6>configureForTest.js</h6>
     <pre class="javascript"><code data-trim contenteditable>
 var nconf = require('nconf');
 nconf.overrides({ superuser: ['Charli'] });
 module.exports = require('../configure');
     </code></pre>
 
-    <p>And call this module from the test</p>
-
+    <h6>And call this module from the test</h6>
     <pre class="javascript"><code data-trim contenteditable>
 // before:
 var nconf = require('../../configure');
@@ -600,7 +595,7 @@ var nconf = require('../../configure');
 // now:
 require('../../testutil/configureForTest');
     </code></pre>
-
+    <br>
     <p>Additionally, we do not need to setup anything in a <code>beforeEach</code></p>
 
     <aside class="notes">
@@ -629,7 +624,7 @@ require('../../testutil/configureForTest');
       Combine <code>CoolBeans</code> with <code>nconf</code> by replacing some beans with fake implementations. 
     </p>
 
-    <h4>beans.json</h4>
+    <h6>beans.json</h6>
     <pre class="javascript"><code data-trim contenteditable>
 "sympa": {"module": "./lib/groups/sympa"},
 "activitiesPersistence": {
@@ -638,7 +633,7 @@ require('../../testutil/configureForTest');
 },
     </code></pre>
 
-    <h4>testbeans.json</h4>
+    <h6>testbeans.json</h6>
     <pre class="javascript"><code data-trim contenteditable>
 "sympa": {},
 "activitiesPersistence": {"module": "./test/persistence/testpersistence"},
@@ -692,10 +687,7 @@ require('../../testutil/configureForTest');
   
   <section>
     <h2>Our Solution</h2>
-  
-    <p>
-      We create a minimal express app with the required middleware.
-    </p>
+    <p>We create a minimal express app with the required middleware.</p>
 
     <pre class="javascript"><code data-trim contenteditable>
 createApp: function (memberID) {
@@ -718,7 +710,8 @@ createApp: function (memberID) {
   </section>
 
   <section>
-    <p>The userStub() function:</p>
+    <h2>Simulating an authenticated user</h2>
+    <h6>The userStub() function:</h6>
     <pre class="javascript"><code data-trim contenteditable>
 module.exports = function (user) {
   var userStub = function (req, res, next) {
@@ -793,11 +786,11 @@ module.exports = function (user) {
   </section>
     
   <section>
-    Our configuration for tests with DB:
+    <h6>Our configuration for tests with DB:</h6>
     <pre class="javascript"><code data-trim contenteditable>
 module.exports = require('./abstractConfigureForTest')('testbeansWithDB.json');
     </code></pre>
-      The modified beans definitions in <code>testbeansWithDB.json</code>:
+      <h6>The modified beans definitions in <code>testbeansWithDB.json</code>:</h6>
     <pre class="javascript"><code data-trim contenteditable>
 {
   "activitiesPersistence": {"module": "./lib/persistence/persistence",
@@ -811,7 +804,7 @@ module.exports = require('./abstractConfigureForTest')('testbeansWithDB.json');
   <section>
     The actual database tests are now pretty straightforward:
       
-      The setup clears the database and persists the desired objects:
+      <h6>The setup clears the database and persists the desired objects:</h6>
     <pre class="javascript"><code data-trim contenteditable>
     persistence.drop(function () {
       activitystore.saveActivity(futureActivity, function (err) {
@@ -823,7 +816,7 @@ module.exports = require('./abstractConfigureForTest')('testbeansWithDB.json');
     // ...
     </code></pre>
 
-      The tests:
+      <h6>The tests:</h6>
     <pre class="javascript"><code data-trim contenteditable>
 it('shows only current and future activities as upcoming', function (done) {
   expressApp.get('/upcoming')
@@ -980,14 +973,11 @@ it('shows only past activities as past', function (done) {
     <p>We do not have static html files to provide a DOM for testing. 
       All our html code is rendered at runtime from jade templates and also provided with runtime state (via fields in <code>res.locals</code>)</p>
 
-    <aside class="notes">
-      Hier die Slides für DOM testing.
-    </aside>
   </section>
   
   <section>
-    <h2>form.jade</h2>
-
+    <h2>The Template</h2>
+    <h6>form.jade</h6>
     <pre class="javascript"><code data-trim contenteditable>
 doctype html
 
@@ -1006,6 +996,7 @@ html
     hr
     p The injected variable is #{val.words}
     </code></pre>
+    <br>
     <p>The input field is marked mandatory via JavaScript (<code>jquery-validation</code>)</p>
     <aside class="notes">
       <p>#{val.words} is the runtime state</p>
@@ -1014,8 +1005,9 @@ html
   </section>
   
   <section>
-    <h2>check-form.js</h2>
-
+    <h2>Validation Code</h2>
+    
+    <h6>check-form.js</h6>
     <pre class="javascript"><code data-trim contenteditable>
 var form_validator;
 var initValidator = function () {
@@ -1036,7 +1028,7 @@ $(document).ready(initValidator);
   
   <section>
     <h2>The Test</h2>
-
+    <h6>formtests.js</h6>
     <pre class="javascript"><code data-trim contenteditable>
 describe('The Form', function () {
   var checkFieldMandatory = function (fieldname) {
@@ -1071,7 +1063,8 @@ describe('The Form', function () {
   </section>
   
   <section>
-    <h4>The Mixin</h4>
+    <h2>Mixin and Glue</h2>
+    <h6>form.js</h6>
     <pre class="javascript"><code data-trim contenteditable>
 mixin theform(value)
   form#theform(action='/submit', method='post')
@@ -1081,19 +1074,20 @@ mixin theform(value)
   hr
   p The injected variable is #{value.words}
     </code></pre>
-    <h4>forms.jade</h4>
+    <h6>forms.jade</h6>
     <pre class="javascript"><code data-trim contenteditable>
 include ../../views/form
 +theform(val)
     </code></pre>
-    <h4>locals</h4>
+    <h6>locals.js</h6>
     <pre class="javascript"><code data-trim contenteditable>
 module.exports = {val: {words: 'some text'}};
     </code></pre>
   </section>
 
   <section>
-    <h2>Gruntfile</h2>
+    <h2>The build targets</h2>
+    <h6>Gruntfile.js</h6>
     <pre class="javascript"><code data-trim contenteditable>
 jade: {
   compile: {
