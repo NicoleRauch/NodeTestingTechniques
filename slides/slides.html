@@ -651,7 +651,8 @@ require('../../testutil/configureForTest');
     <h2>HTML Tests</h2>
   
     <p>
-      <b>Problem:</b> How can I perform tests of the topmost backend layer with only minimal configuration of the <code>express</code> app stack?
+      <b>Problem:</b> How can I check that pages are rendered correctly. I don't want to start a full-fledged server, 
+      but rather a minimal configuration of the <code>express</code> app stack?
     </p>
 
     <aside class="notes">
@@ -662,7 +663,7 @@ require('../../testutil/configureForTest');
   <section>
     <h2>What we want to test</h2>
 
-      <ul>
+    <ul>
       <li>The rendered HTML is as we want it to be</li>
       <li>Everything below the HTML renderer is wired correctly</li>
       <li>The relevant middleware (i18n, accessrights) works and is wired correctly:</li>
@@ -671,30 +672,40 @@ require('../../testutil/configureForTest');
         <li>If there is no user logged in, the member pages are not visible at all.</li>
         <li>Internationalization.</li>
       </ul>
-      </ul>
-</section>    
+    </ul>
+  </section>    
     
   <section>
-      <h2>Obstacles to Testing</h2>
+    <h2>Obstacles to Testing</h2>
     <ul>
       <li>The current user is part of the session and managed by a third-party module named <code>passport</code>. Authentication is done via OpenID or github.</li>
+      <li>I18n is also digged in deeply as middleware</li>
     </ul>
 
     <aside class="notes">
-      We have behaviour in the topmost layer, mainly user Privileges
+      We do not want to modify the contents of the session directly during tests
     </aside>
   </section>
-  
+
+  <section style="text-align: center;">
+    <h2>What could be a solution?</h2>
+    <p>&nbsp;</p>
+    <div class="fragment">
+      <h3>Try out</h3>
+      <h3>Discuss</h3>
+    </div>
+  </section>
+
   <section>
     <h2>Our Solution</h2>
     <p>We create a minimal express app with the required middleware.</p>
-
+    <h6>configureForTest.js</h6>
     <pre class="javascript"><code data-trim contenteditable>
 createApp: function (memberID) {
   var app = express();
   app.use(i18n.handle); // internationalization
   app.use(require('express-session')({secret: 'secret', cookie: {maxAge: 10000}}));
-
+  // ... some more details left out
   if (memberID) {
     var Member = beans.get('member');
     app.use(userStub({member: new Member({id: memberID})})); // a logged in user
@@ -702,6 +713,7 @@ createApp: function (memberID) {
   app.use(beans.get('accessrights')); // priviliges
   app.use(beans.get('expressViewHelper')); // utilities
   app.use('/', beans.get(appName)); the module under test
+  // ... some more details left out
   return app;
 }
     </code></pre>
@@ -711,7 +723,7 @@ createApp: function (memberID) {
 
   <section>
     <h2>Simulating an authenticated user</h2>
-    <h6>The userStub() function:</h6>
+    <h6>userStub.js</h6>
     <pre class="javascript"><code data-trim contenteditable>
 module.exports = function (user) {
   var userStub = function (req, res, next) {
@@ -729,13 +741,11 @@ module.exports = function (user) {
 
   <section>
     <h2>Benefits</h2>
-
-    <p>
-      <ul>
+    <ul>
       <li>We can easily set up isolated parts of the application for testing.</li>
-      <li>We can determine if and which user is logged in.</li>
-      </ul>
-    </p>
+      <li>We can rely on a defined set of plugged-in middleware.</li>
+      <li>We can define which user is logged in.</li>
+    </ul>
     <aside class="notes">
     </aside>
   </section>
@@ -1051,7 +1061,16 @@ describe('The Form', function () {
   <section>
     <h1>CODE</h1>
   </section>
-  
+
+  <section style="text-align: center;">
+    <h2>What could be a solution?</h2>
+    <p>&nbsp;</p>
+    <div class="fragment">
+      <h3>Try out</h3>
+      <h3>Discuss</h3>
+    </div>
+  </section>
+
   <section>
     <h2>Our Solution</h2>
     <ol>
