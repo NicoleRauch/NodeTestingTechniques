@@ -3,8 +3,7 @@
 var moment = require('moment-timezone');
 var _ = require('lodash');
 
-var conf = require('nconf');
-var beans = conf.get('beans');
+var beans = require('nconf').get('beans');
 var misc = beans.get('misc');
 var activitiesService = beans.get('activitiesService');
 var activitystore = beans.get('activitystore');
@@ -60,5 +59,24 @@ app.get('/edit/:url', function (req, res, next) {
     res.render('edit', { activity: activity });
   });
 });
+
+app.post('/submit', function (req, res, next) {
+  activitystore.getActivity(req.body.previousUrl, function (err, activity) {
+    if (err) { return next(err); }
+    if (!activity) { activity = new Activity({owner: req.user.member.id()}); }
+    activity.fillFromUI(req.body);
+    activitystore.saveActivity(activity, function (err) {
+      if (err && err.message === CONFLICTING_VERSIONS) {
+        // we try again because of a racing condition during save:
+        statusmessage.errorMessage('message.title.conflict', 'message.content.save_error_retry').putIntoSession(req);
+        return res.redirect('/activities/edit/' + encodeURIComponent(activity.url()));
+      }
+      if (err) { return next(err); }
+      statusmessage.successMessage('message.title.save_successful', 'message.content.activities.saved').putIntoSession(req);
+      res.redirect('/activities/' + encodeURIComponent(activity.url()));
+    });
+  });
+});
+
 
 module.exports = app;

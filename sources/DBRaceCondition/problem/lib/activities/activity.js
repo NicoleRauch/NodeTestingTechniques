@@ -2,6 +2,7 @@
 
 var moment = require('moment-timezone');
 var beans = require('nconf').get('beans');
+var fieldHelpers = beans.get('fieldHelpers');
 var Resources = beans.get('resources');
 
 function Activity(object) {
@@ -51,6 +52,23 @@ Activity.prototype.resourceNamed = function (resourceName) {
 
 Activity.prototype.resourceNames = function () {
   return this.resources().resourceNames();
+};
+
+Activity.prototype.fillFromUI = function (object) {
+  var self = this;
+  self.state.url = object.url;
+
+  self.state.title = object.title;
+  self.state.description = object.description;
+  self.state.location = object.location;
+  // currently we only support MEZ/MESZ for events
+  self.state.startUnix = fieldHelpers.parseToUnixUsingDefaultTimezone(object.startDate, object.startTime);
+
+  // these are the resource definitions in the edit page:
+  if (object.resources) {
+    this.resources().fillFromUI(object.resources);
+  }
+  return self;
 };
 
 module.exports = Activity;

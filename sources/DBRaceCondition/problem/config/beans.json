@@ -12,5 +12,6 @@
   "resources": {"module": "./lib/activities/resources"},
   "resourceRegistrationRenderer": {"module": "./lib/activities/resourceRegistrationRenderer"},
 
+  "fieldHelpers": {"module": "./lib/commons/fieldHelpers"},
   "misc": {"module": "./lib/commons/misc"}
 }
