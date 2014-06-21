@@ -1,10 +1,5 @@
 include activities-mixins
 
 block content
-  h2 Activities - #{range}
-  ul
-    li: a(href='/activities/upcoming') Upcoming
-    li: a(href='/activities/past') Past
-    li: a(href='/activities') All
   h2 Activities
   +activityList(activities)

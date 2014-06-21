@@ -23,14 +23,6 @@ app.get('/', function (req, res, next) {
   activitiesForDisplay(activitystore.allActivities, next, res, 'All');
 });
 
-app.get('/upcoming', function (req, res, next) {
-  activitiesForDisplay(activitystore.upcomingActivities, next, res, 'Upcoming');
-});
-
-app.get('/past', function (req, res, next) {
-  activitiesForDisplay(activitystore.pastActivities, next, res, 'Past');
-});
-
 app.get('/:url', function (req, res, next) {
   activitystore.getActivity(req.params.url, function (err, activity) {
     var canEditAddon = false;
