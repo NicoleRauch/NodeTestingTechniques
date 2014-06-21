@@ -5,30 +5,26 @@ mixin activityform(activity)
     +hidden('id', activity.id())
     +hidden('previousUrl', activity.url())
     fieldset
-      .row
-        .col-md-12
-          h3 Edit
-          .row
-            +text('title', 'Title', activity.title())
-            .row
-              +date('startDate', 'Start', activity.startMoment().format('L'))
-              +time('startTime', activity.startMoment().format('LT'))
-            +textarea('description', 'Description', activity.description())
-            .form-group
-              +controlLabel('url', 'URL suffix')
-              input.form-control#url(type='text', name='url', value=activity.url())
-            +text('location', 'Location', activity.location())
-        #resources
-          h4 Resources
-          each name in activity.resourceNames()
-            - var resource = activity.resourceNamed(name)
-            +resourceRow(name)
-            +hidden('resources[previousNames]', name)
+      h3 Edit
+      +text('title', 'Title', activity.title())
+      +controlLabel('startDate', 'Start')
+      input(id='startDate', type='text', name='startDate', value=activity.startMoment().format('L'))
+      label(for='startTime') &nbsp;
+      input(id='startTime', type='text', name='startTime', value=activity.startMoment().format('LT'))
+      +textarea('description', 'Description', activity.description())
+      .form-group
+        +controlLabel('url', 'URL suffix')
+        input(type='text', name='url', value=activity.url())
+      +text('location', 'Location', activity.location())
+      h4 Resources
+      each name in activity.resourceNames()
+        - var resource = activity.resourceNamed(name)
+        +resourceRow(name)
+        +hidden('resources[previousNames]', name)
       hr
       +submitButtons('Save')
 
 mixin resourceRow(name)
-  .row
-    +controlLabel('bezeichnung', 'Label')
-    input(name='resources[names]', value=name, type='text', placeholder=('Activity'))
-    p
+  +controlLabel('bezeichnung', 'Label')
+  input(name='resources[names]', value=name, type='text', placeholder=('Activity'))
+  p
