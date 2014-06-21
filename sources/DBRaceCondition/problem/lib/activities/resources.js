@@ -8,8 +8,6 @@ var misc = beans.get('misc');
 
 var Resource = beans.get('resource');
 
-//var util = require('util');
-
 var removeInvalidResources = function (state) {
   _.each(Object.getOwnPropertyNames(state), function (key) {
     if (!state[key]) {
@@ -37,7 +35,7 @@ Resources.prototype.named = function (resourceName) {
 
 Resources.prototype.fillFromUI = function (uiInputArrays) {
   function matchArrayEntries(input) {
-    return _.zip(misc.toArray(input.previousNames), misc.toArray(input.names), misc.toArray(input.limits));
+    return _.zip(misc.toArray(input.previousNames), misc.toArray(input.names));
   }
 
   var newResources = matchArrayEntries(uiInputArrays);
@@ -55,7 +53,7 @@ Resources.prototype.fillFromUI = function (uiInputArrays) {
       // get the old resource or create a new resource
       var resource = self.named(previousName);
       position = position + 1;
-      resource.fillFromUI({limit: input[2], position: position});
+      resource.fillFromUI({position: position});
       newState[name] = resource.state;
     }
   });
@@ -74,11 +72,6 @@ Resources.prototype.fillFromUI = function (uiInputArrays) {
 Resources.prototype.allRegisteredMembers = function () {
   var self = this;
   return _(self.state).keys().map(function (key) {return self.named(key).registeredMembers(); }).flatten().uniq().value();
-};
-
-Resources.prototype.allWaitinglistEntries = function () {
-  var self = this;
-  return _(self.state).keys().map(function (key) {return self.named(key).waitinglistEntries(); }).flatten().uniq().compact().value();
 };
 
 Resources.prototype.resourceNamesOf = function (memberId) {

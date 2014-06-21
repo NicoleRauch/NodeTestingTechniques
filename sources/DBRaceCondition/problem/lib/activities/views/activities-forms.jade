@@ -22,16 +22,13 @@ mixin activityform(activity)
           h4 Resources
           each name in activity.resourceNames()
             - var resource = activity.resourceNamed(name)
-            +resourceRow(name, resource.limit())
+            +resourceRow(name)
             +hidden('resources[previousNames]', name)
       hr
       +submitButtons('Save')
 
-mixin resourceRow(name, limit)
+mixin resourceRow(name)
   .row
     +controlLabel('bezeichnung', 'Label')
-    input(name='resources[names]', value=name, type='text', placeholder=('Meeting'))
-    | &nbsp;
-    +controlLabel('anzahl', 'Limit')
-    input(name='resources[limits]', value=limit, type='text', placeholder=('unlimited'))
+    input(name='resources[names]', value=name, type='text', placeholder=('Activity'))
     p
