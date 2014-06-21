@@ -43,14 +43,8 @@ module.exports = function (grunt) {
         },
         files: {
           'public/stylesheets/screen.css': [
-            'public/stylesheets/vendor/fullcalendar.css',
             'public/stylesheets/less/bootstrap.less',
-            'public/stylesheets/vendor/datepicker3.css',
-            'public/stylesheets/less/bootstrap-markdown-patched.less',
             'public/stylesheets/vendor/font-awesome.min.css',
-            'public/stylesheets/less/pick-a-color-patched.less',
-            'public/stylesheets/vendor/shCoreDefault-patched.css',
-            'public/stylesheets/vendor/jquery.dataTables.css',
             'public/stylesheets/partials/agora.less'
           ]
         }
@@ -64,22 +58,7 @@ module.exports = function (grunt) {
         src: [
           'locales/frontend_de.js',
           'node_modules/jquery/dist/jquery.js',
-          'public/clientscripts/global/bootstrap.js',
-          'public/clientscripts/global/bootstrap-datepicker.js',
-          'public/clientscripts/global/bootstrap-markdown.js',
-          'node_modules/moment-timezone/node_modules/moment/min/moment.min.js',
-          'public/clientscripts/global/fullcalendar-patched.js',
-          'public/clientscripts/global/de.js', // for fullcalendar
-          'public/clientscripts/global/tinycolor-0.9.15.min.js', // for pick-a-color
-          'public/clientscripts/global/pick-a-color.js',
-          'public/clientscripts/global/bootstrap-datepicker.de.js',
-          'node_modules/jquery-validation/jquery.validate.js',
-          'node_modules/jquery-validation/additional-methods.js',
-          'node_modules/jquery-validation/localization/messages_de.js',
-          'node_modules/jquery-validation/localization/methods_de.js',
-          'node_modules/bootstrap-timepicker/js/bootstrap-timepicker.js',
-          'node_modules/URIjs/src/URI.min.js',
-          'public/clientscripts/global/agora.js'
+          'public/clientscripts/global/bootstrap.js'
         ],
         dest: 'public/clientscripts/global_de.js'
       },
@@ -87,19 +66,7 @@ module.exports = function (grunt) {
         src: [
           'locales/frontend_en.js',
           'node_modules/jquery/dist/jquery.js',
-          'public/clientscripts/global/bootstrap.js',
-          'public/clientscripts/global/bootstrap-datepicker.js',
-          'public/clientscripts/global/bootstrap-markdown.js',
-          'node_modules/moment-timezone/node_modules/moment/min/moment.min.js',
-          'public/clientscripts/global/fullcalendar-patched.js',
-          'public/clientscripts/global/en-gb.js', // for fullcalendar
-          'public/clientscripts/global/tinycolor-0.9.15.min.js', // for pick-a-color
-          'public/clientscripts/global/pick-a-color.js',
-          'node_modules/jquery-validation/jquery.validate.js',
-          'node_modules/jquery-validation/additional-methods.js',
-          'node_modules/bootstrap-timepicker/js/bootstrap-timepicker.js',
-          'node_modules/URIjs/src/URI.min.js',
-          'public/clientscripts/global/agora.js'
+          'public/clientscripts/global/bootstrap.js'
         ],
         dest: 'public/clientscripts/global_en.js'
       }
@@ -113,26 +80,12 @@ module.exports = function (grunt) {
           reporter: 'dot' // set to 'spec' if you like it more verbose
         }
       }
-    },
-    jade: {
-      compile: {
-        options: {
-          pretty: true,
-          data: function () {
-            return require('./frontendtests/fixtures/locals');
-          }
-        },
-        files: {
-          "frontendtests/fixtures/forms.html": "frontendtests/fixtures/forms.jade"
-        }
-      }
     }
   });
 
   // These plugins provide necessary tasks.
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.loadNpmTasks('grunt-contrib-jade');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-mocha-istanbul');
   grunt.loadNpmTasks('grunt-jslint');
