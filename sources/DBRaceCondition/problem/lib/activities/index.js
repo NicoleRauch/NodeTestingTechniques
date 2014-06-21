@@ -8,6 +8,7 @@ var beans = conf.get('beans');
 var misc = beans.get('misc');
 var activitiesService = beans.get('activitiesService');
 var activitystore = beans.get('activitystore');
+var resourceRegistrationRenderer = beans.get('resourceRegistrationRenderer');
 
 var app = misc.expressAppIn(__dirname);
 
@@ -48,7 +49,6 @@ app.get('/:url', function (req, res, next) {
     }
 
     res.render('get', { activity: activity, resourceRegistrationRenderer: resourceRegistrationRenderer,
-      calViewYear: activity.year(), calViewMonth: activity.month(),
       canEditAddon: canEditAddon, addonAlreadyFilled: addonAlreadyFilled,
       hasToBePaid: hasToBePaid, paymentAlreadyDone: paymentAlreadyDone});
   });

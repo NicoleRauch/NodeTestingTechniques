@@ -5,6 +5,12 @@ var express = require('express');
 var path = require('path');
 
 module.exports = {
+  toObject: function (Constructor, callback, err, jsobject) {
+    if (err) {return callback(err); }
+    if (jsobject) { return callback(null, new Constructor(jsobject)); }
+    callback(null, null);
+  },
+
   toObjectList: function (Constructor, callback, err, jsobjects) {
     if (err) { return callback(err); }
     callback(null, _.map(jsobjects, function (each) { return new Constructor(each); }));

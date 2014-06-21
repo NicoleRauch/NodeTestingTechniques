@@ -9,6 +9,7 @@ var moment = require('moment-timezone');
 var persistence = beans.get('activitiesPersistence');
 var Activity = beans.get('activity');
 
+var toActivity = _.partial(misc.toObject, Activity);
 var toActivityList = _.partial(misc.toObjectList, Activity);
 
 var allActivitiesByDateRange = function (rangeFrom, rangeTo, sortOrder, callback) {
@@ -46,6 +47,10 @@ module.exports = {
     var start = 0;
     var end = moment().unix();
     allActivitiesByDateRangeInDescendingOrder(start, end, callback);
+  },
+
+  getActivity: function (url, callback) {
+    persistence.getByField({url: url}, _.partial(toActivity, callback));
   },
 
   saveActivity: function (activity, callback) {

@@ -8,5 +8,9 @@
   },
   "activity": {"module": "./lib/activities/activity"},
 
+  "resource": {"module": "./lib/activities/resource"},
+  "resources": {"module": "./lib/activities/resources"},
+  "resourceRegistrationRenderer": {"module": "./lib/activities/resourceRegistrationRenderer"},
+
   "misc": {"module": "./lib/commons/misc"}
 }

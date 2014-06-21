@@ -34,6 +34,16 @@ module.exports = function (collectionName) {
       });
     },
 
+    getByField: function (fieldAsObject, callback) {
+      performInDB(function (err, db) {
+        if (err) { return callback(err); }
+        db.collection(collectionName).find(fieldAsObject).toArray(function (err, result) {
+          if (err) { return callback(err); }
+          callback(null, result[0]);
+        });
+      });
+    },
+
     drop: function (callback) {
       performInDB(function (err, db) {
         if (err) { return callback(err); }
