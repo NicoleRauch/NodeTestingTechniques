@@ -28,13 +28,10 @@ mixin activityform(activity)
       +submitButtons('Save')
 
 mixin resourceRow(name, limit)
-  .row.form-group
-    .col-xs-3.col-sm-4
-      +controlLabel('bezeichnung', 'Label')
-      input.form-control(name='resources[names]', value=name, type='text', placeholder=('Meeting'))
-    .col-xs-3.col-sm-2
-      +controlLabel('anzahl', 'Limit')
-      input.form-control(name='resources[limits]', value=limit, type='text', placeholder=('unlimited'))
-    +hidden('resources[isRegistrationOpen]', true)
-    +hidden('resources[canUnsubscribe]', true)
-    br
+  .row
+    +controlLabel('bezeichnung', 'Label')
+    input(name='resources[names]', value=name, type='text', placeholder=('Meeting'))
+    | &nbsp;
+    +controlLabel('anzahl', 'Limit')
+    input(name='resources[limits]', value=limit, type='text', placeholder=('unlimited'))
+    p

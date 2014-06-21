@@ -35,19 +35,9 @@ Resources.prototype.named = function (resourceName) {
   return new Resource(this.state[resourceName], resourceName);
 };
 
-Resources.prototype.copyFrom = function (originalResources) {
-  var self = this;
-  _.each(originalResources.resourceNames(), function (resourceName) {
-    self.state[resourceName] = {};
-    self.named(resourceName).copyFrom(originalResources.named(resourceName));
-  });
-  return self;
-};
-
 Resources.prototype.fillFromUI = function (uiInputArrays) {
   function matchArrayEntries(input) {
-    return _.zip(misc.toArray(input.previousNames), misc.toArray(input.names), misc.toArray(input.limits),
-      misc.toArray(input.isRegistrationOpen), misc.toArray(input.hasWaitinglist), misc.toArray(input.canUnsubscribe));
+    return _.zip(misc.toArray(input.previousNames), misc.toArray(input.names), misc.toArray(input.limits));
   }
 
   var newResources = matchArrayEntries(uiInputArrays);
@@ -65,7 +55,7 @@ Resources.prototype.fillFromUI = function (uiInputArrays) {
       // get the old resource or create a new resource
       var resource = self.named(previousName);
       position = position + 1;
-      resource.fillFromUI({limit: input[2], isRegistrationOpen: input[3], hasWaitinglist: input[4], canUnsubscribe: input[5], position: position});
+      resource.fillFromUI({limit: input[2], position: position});
       newState[name] = resource.state;
     }
   });
@@ -91,21 +81,11 @@ Resources.prototype.allWaitinglistEntries = function () {
   return _(self.state).keys().map(function (key) {return self.named(key).waitinglistEntries(); }).flatten().uniq().compact().value();
 };
 
-Resources.prototype.registrationDatesOf = function (memberId) {
-  var self = this;
-  return _(self.resourceNames()).map(function (resourceName) { return self.named(resourceName).registrationDateOf(memberId); }).compact().sortBy().value();
-};
-
 Resources.prototype.resourceNamesOf = function (memberId) {
   var self = this;
   return _(self.resourceNames()).map(function (resourceName) {
     return self.named(resourceName).isAlreadyRegistered(memberId) && resourceName;
   }).compact().sort().value();
-};
-
-Resources.prototype.memberIsRegisteredForMoreDaysThan = function (days, member) {
-  var soManyDaysAgo = moment().subtract('days', days);
-  return soManyDaysAgo.isAfter(_.min(this.registrationDatesOf(member.id())));
 };
 
 module.exports = Resources;

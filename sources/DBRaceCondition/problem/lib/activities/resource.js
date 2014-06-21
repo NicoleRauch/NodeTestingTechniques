@@ -10,8 +10,6 @@ function Resource(resourceObject, resourceName) {
 }
 
 Resource.prototype.fillFromUI = function (uiInputObject) {
-  this.state._registrationOpen = uiInputObject.isRegistrationOpen === 'yes';
-  this.state._canUnsubscribe = uiInputObject.canUnsubscribe === 'yes';
   this.state._position = uiInputObject.position;
 
   // adjust the limit
@@ -32,15 +30,6 @@ Resource.prototype.registeredMembers = function () {
   return _.pluck(this.state._registeredMembers, 'memberId');
 };
 
-Resource.prototype.registrationDateOf = function (memberId) {
-  var self = this;
-  if (!self.state._registeredMembers) {
-    self.state._registeredMembers = [];
-  }
-  var registration = _.find(self.state._registeredMembers, {'memberId': memberId});
-  return registration ? moment(registration.registeredAt) : undefined;
-};
-
 Resource.prototype.addMemberId = function (memberId, momentOfRegistration) {
   if (this.isFull()) { return; }
 
@@ -58,19 +47,10 @@ Resource.prototype.isAlreadyRegistered = function (memberId) {
 };
 
 Resource.prototype.removeMemberId = function (memberId) {
-  if (this.canUnsubscribe()) {
-    var index = this.registeredMembers().indexOf(memberId);
-    if (index > -1) {
-      this.state._registeredMembers.splice(index, 1);
-    }
+  var index = this.registeredMembers().indexOf(memberId);
+  if (index > -1) {
+    this.state._registeredMembers.splice(index, 1);
   }
-};
-
-Resource.prototype.copyFrom = function (originalResource) {
-  this.state._registeredMembers = [];
-  this.state._limit = originalResource.limit();
-  this.state._registrationOpen = true;
-  return this;
 };
 
 Resource.prototype.limit = function () {
@@ -88,17 +68,8 @@ Resource.prototype.numberOfFreeSlots = function () {
   return 'unbegrenzt';
 };
 
-Resource.prototype.isRegistrationOpen = function () {
-  return this.state._registrationOpen;
-};
-
-Resource.prototype.canUnsubscribe = function () {
-  return (this.state._canUnsubscribe === undefined) || this.state._canUnsubscribe;
-};
-
 // registration states
 
-Resource.fixed = 'fixed'; // registered and locked (no unsubscribe possible)
 Resource.registered = 'registered';
 Resource.registrationPossible = 'registrationPossible';
 Resource.registrationElsewhere = 'registrationElsewhere';
@@ -107,15 +78,15 @@ Resource.full = 'full';
 
 Resource.prototype.registrationStateFor = function (memberId) {
   if (this.registeredMembers().indexOf(memberId) > -1) {
-    return this.canUnsubscribe() ? Resource.registered : Resource.fixed;
+    return Resource.registered;
   }
-  if (this.isRegistrationOpen() && !this.isFull()) {
+  if (!this.isFull()) {
     return Resource.registrationPossible;
   }
   if (this.limit() === 0) {
     return Resource.registrationElsewhere;
   }
-  if ((!this.isRegistrationOpen() && !this.limit()) || (this.limit() && this.registeredMembers().length === 0)) {
+  if (this.limit() && this.registeredMembers().length === 0) {
     return Resource.registrationClosed;
   }
   return Resource.full;
