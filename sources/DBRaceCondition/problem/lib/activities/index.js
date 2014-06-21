@@ -57,7 +57,7 @@ app.get('/:url', function (req, res, next) {
 app.get('/edit/:url', function (req, res, next) {
   activitystore.getActivity(req.params.url, function (err, activity) {
     if (err || activity === null) { return next(err); }
-    res.render('edit', { activity: activity, groups: groups });
+    res.render('edit', { activity: activity });
   });
 });
 

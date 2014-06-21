@@ -13,6 +13,10 @@ function Activity(object) {
   return this;
 }
 
+Activity.prototype.id = function () {
+  return this.state.id;
+};
+
 Activity.prototype.title = function () {
   return this.state.title;
 };
