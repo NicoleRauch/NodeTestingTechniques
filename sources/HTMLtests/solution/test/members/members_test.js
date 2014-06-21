@@ -7,15 +7,13 @@ var expect = require('must');
 var beans = require('../../testutil/configureForTest').get('beans');
 var Member = beans.get('member');
 var memberstore = beans.get('memberstore');
-var dummymember;
 
 var createApp = require('../../testutil/testHelper')('membersApp').createApp;
-var app = createApp();
-
-var allMembers;
-var getMember;
 
 describe('Members application', function () {
+  var dummymember;
+  var allMembers;
+  var getMember;
 
   beforeEach(function () {
     dummymember = new Member({id: 'memberID', nickname: 'hada', email: 'a@b.c', site: 'http://my.blog', firstname: 'Hans', lastname: 'Dampf', authentications: []});
