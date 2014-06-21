@@ -1,0 +1,6 @@
+mixin activityList(activities, member)
+  dl.dl-horizontal
+    for activity in activities
+      ul
+        li #{activity.startMoment().format('LL')} -&nbsp;
+          a(href='/activities/#{encodeURIComponent(activity.url())}') #{activity.title()}
