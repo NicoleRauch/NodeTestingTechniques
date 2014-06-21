@@ -24,17 +24,5 @@ module.exports.htmlRepresentationOf = function (activity, resourceName, memberId
   if (state === Resource.registered) {
     return new RenderingInformation('unsubscribe/' + url, isSingle ? 'I cannot participate…' : 'Unsubscribe');
   }
-  if (state === Resource.registrationPossible) {
-    return new RenderingInformation('subscribe/' + url, isSingle ? 'I\'m in!' : 'Subscribe');
-  }
-  if (state === Resource.registrationElsewhere) {
-    return new RenderingInformation(null, 'Subscription is not possible via Softwerkskammer.');
-  }
-  if (state === Resource.registrationClosed) {
-    return new RenderingInformation(null, 'Subscription is currently not allowed.');
-  }
-  if (state === Resource.fixed) {
-    return new RenderingInformation(null, 'Subscribed');
-  }
-  return new RenderingInformation(null, 'All spots are taken.', true);
+  return new RenderingInformation('subscribe/' + url, isSingle ? 'I\'m in!' : 'Subscribe');
 };
