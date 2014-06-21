@@ -107,7 +107,7 @@ module.exports = function (collectionName) {
       var user = conf.get('mongoUser');
       var pass = conf.get('mongoPass');
 
-      var theDB = new Db('swk-spa', new Server(host, port), {w: 1, safe: false});
+      var theDB = new Db(conf.get('mongoDB'), new Server(host, port), {w: 1, safe: false});
       theDB.open(function (err, db) {
         if (err) { return; }
         if (user) {

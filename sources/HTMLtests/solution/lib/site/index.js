@@ -21,10 +21,6 @@ app.get('/login', function (req, res) {
   res.render('authenticationRequired');
 });
 
-app.get('/mustBeSuperuser', function (req, res) {
-  res.render('superuserRightsRequired', {requestedPage: req.query.page});
-});
-
 app.get('/language/:isoCode', function (req, res) {
   req.session.language = req.params.isoCode;
   res.redirect(req.query.currentUrl);

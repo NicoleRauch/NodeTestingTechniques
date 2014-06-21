@@ -22,6 +22,5 @@
   "expressSessionConfigurator": {"module": "./lib/middleware/expressSessionConfigurator"},
   "expressViewHelper": {"module": "./lib/middleware/expressViewHelper"},
   "redirectRuleForNewUser": {"module": "./lib/middleware/redirectRuleForNewUser"},
-  "secureByLogin": {"module": "./lib/middleware/secureByLogin"},
-  "secureSuperuserOnly": {"module": "./lib/middleware/secureSuperuserOnly"}
+  "secureByLogin": {"module": "./lib/middleware/secureByLogin"}
 }

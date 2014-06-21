@@ -11,8 +11,9 @@ function createConfiguration() {
     port: '17124',
     mongoHost: 'localhost',
     mongoPort: '27017',
+    mongoDB: 'swk-spa',
     publicUrlPrefix: 'http://localhost:17124',
-    securedByLoginURLPattern: '/members|/new|/edit|/submit',
+    securedByLoginURLPattern: '/members',
     secret: 'secret',
     beans: new Beans('./config/beans.json')
   });

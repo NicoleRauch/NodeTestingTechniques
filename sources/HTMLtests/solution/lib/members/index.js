@@ -1,6 +1,5 @@
 'use strict';
 
-var async = require('async');
 var _ = require('lodash');
 var conf = require('nconf');
 var beans = conf.get('beans');
