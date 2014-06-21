@@ -1,0 +1,20 @@
+include activities-mixins
+
+block content
+  a(href='/activities/edit/#{encodeURIComponent(activity.url())}') #{'Edit'}
+  h2 #{activity.title()}
+    br
+    small #{activity.startMoment().format('LL')} - #{activity.startMoment().format('LT')}
+  p
+  | Description: #{activity.description()}
+  br
+  | Location: #{activity.location()}
+  p
+  div.hidden-print
+    each resourceName in activity.resourceNames()
+      +subscriptionButtons(activity, resourceName, resourceRegistrationRenderer)
+
+block scripts
+  script.
+    displayedActivityStart = moment('#{activity.startMoment().toISOString()}');
+//- cannot write "#{activity.startMoment()}" as we need to produce a string to eval in the client

@@ -1,0 +1,18 @@
+{
+  "activitiesApp": {"module": "./lib/activities"},
+  "activitiesService": {"module": "./lib/activities/activitiesService"},
+  "activitystore": {"module": "./lib/activities/activitystore"},
+  "activitiesPersistence": {
+    "module": "./lib/persistence/persistence",
+    "constructorArgs": { "collectionName": "activitystore" }
+  },
+  "activity": {"module": "./lib/activities/activity"},
+
+  "resource": {"module": "./lib/activities/resource"},
+  "resources": {"module": "./lib/activities/resources"},
+  "resourceRegistrationRenderer": {"module": "./lib/activities/resourceRegistrationRenderer"},
+
+  "constants": {"module": "./lib/commons/constants"},
+  "fieldHelpers": {"module": "./lib/commons/fieldHelpers"},
+  "misc": {"module": "./lib/commons/misc"}
+}

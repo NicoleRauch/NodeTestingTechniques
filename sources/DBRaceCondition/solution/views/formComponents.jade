@@ -1,0 +1,24 @@
+mixin text(name, label, value, placeholder)
+  .form-group
+    +controlLabel(name, label)
+    input(id=name, type='text', name=name, value=value, placeholder=placeholder, disabled=readonly)
+
+mixin textarea(name, label, value)
+  +textareaInternal('md-textarea', '7', name, label, value)
+
+mixin submitButtons(submitTextToken)
+    button.btn.btn-primary(type='submit') #{(submitTextToken)}
+
+mixin hidden(name, value)
+  input(type='hidden', name=name, value=value)
+
+// GENERAL
+mixin controlLabel(name, label)
+  label(for=name) #{label}:
+
+mixin textareaInternal(classname, rowCount, name, label, value)
+  .form-group
+    +controlLabel(name, label)
+    textarea(class=classname, id=name, rows=rowCount, type='text', name=name) #{value}
+
+

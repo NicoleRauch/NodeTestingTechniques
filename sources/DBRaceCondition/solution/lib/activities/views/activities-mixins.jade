@@ -1,0 +1,26 @@
+mixin visitorCount(count)
+  p
+    | #{"So far, there are " + count + " participants."}
+
+mixin subscriptionButtons(activity, resourceName, resourceRegistrationRenderer)
+  -var result = resourceRegistrationRenderer.htmlRepresentationOf(activity, resourceName, "memberId")
+  if (activity.resourceNames().length === 1)
+    if (!result.representsButton())
+      | #{result.displayText}
+    else
+      a(href='#{result.url}', class='btn #{btnClass}') #{result.displayText}
+  else
+    form.form-horizontal
+      .form-group
+        label.control-label.col-xs-6(style='text-align: left;') #{resourceName}:&nbsp;
+        if (!result.representsButton())
+          | #{result.displayText}
+        else
+          a(href='#{result.url}') #{result.displayText}
+
+mixin activityList(activities, member)
+  dl.dl-horizontal
+    for activity in activities
+      ul
+        li #{activity.startMoment().format('LL')} -&nbsp;
+          a(href='/activities/#{encodeURIComponent(activity.url())}') #{activity.title()}

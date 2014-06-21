@@ -1,0 +1,3 @@
+{
+  "activitiesPersistence": {"module": "./test/persistence/testpersistence"}
+}

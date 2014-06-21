@@ -1,0 +1,6 @@
+{
+  "activitiesPersistence": {"module": "./lib/persistence/persistence",
+    "constructorArgs": {
+      "collectionName": "teststore"
+    }}
+}
