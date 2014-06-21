@@ -8,6 +8,7 @@ var misc = beans.get('misc');
 var activitiesService = beans.get('activitiesService');
 var activitystore = beans.get('activitystore');
 var resourceRegistrationRenderer = beans.get('resourceRegistrationRenderer');
+var CONFLICTING_VERSIONS = beans.get('constants').CONFLICTING_VERSIONS;
 
 var app = misc.expressAppIn(__dirname);
 
@@ -68,11 +69,9 @@ app.post('/submit', function (req, res, next) {
     activitystore.saveActivity(activity, function (err) {
       if (err && err.message === CONFLICTING_VERSIONS) {
         // we try again because of a racing condition during save:
-        statusmessage.errorMessage('message.title.conflict', 'message.content.save_error_retry').putIntoSession(req);
         return res.redirect('/activities/edit/' + encodeURIComponent(activity.url()));
       }
       if (err) { return next(err); }
-      statusmessage.successMessage('message.title.save_successful', 'message.content.activities.saved').putIntoSession(req);
       res.redirect('/activities/' + encodeURIComponent(activity.url()));
     });
   });

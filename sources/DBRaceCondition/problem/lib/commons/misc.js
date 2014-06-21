@@ -5,6 +5,13 @@ var express = require('express');
 var path = require('path');
 
 module.exports = {
+  toArray: function (elem) {
+    if (!elem) { return []; }
+    if (elem instanceof Array) { return elem; }
+    if (typeof elem === 'string') { return elem.split(','); }
+    return [ elem ];
+  },
+
   toObject: function (Constructor, callback, err, jsobject) {
     if (err) {return callback(err); }
     if (jsobject) { return callback(null, new Constructor(jsobject)); }

@@ -12,6 +12,7 @@
   "resources": {"module": "./lib/activities/resources"},
   "resourceRegistrationRenderer": {"module": "./lib/activities/resourceRegistrationRenderer"},
 
+  "constants": {"module": "./lib/commons/constants"},
   "fieldHelpers": {"module": "./lib/commons/fieldHelpers"},
   "misc": {"module": "./lib/commons/misc"}
 }
