@@ -19,37 +19,22 @@ mixin activityform(activity)
               input.form-control#url(type='text', name='url', value=activity.url())
             +text('location', 'Location', activity.location())
         #resources
-          .row
-            .col-xs-3.col-sm-4
-              +controlLabel('bezeichnung', ('activities.resourcelabel'))
-            .col-xs-3.col-sm-2
-              +controlLabel('anzahl', ('activities.count'))
-            .col-xs-2.col-sm-2
-              +controlLabel('registrierung', ('activities.registration'))
-            .col-xs-2.col-sm-2
-              +controlLabel('registrierung', ('activities.deregistration'))
+          h4 Resources
           each name in activity.resourceNames()
             - var resource = activity.resourceNamed(name)
-            +resourceRow(name, resource.limit(), resource.isRegistrationOpen(), resource.canUnsubscribe())
+            +resourceRow(name, resource.limit())
             +hidden('resources[previousNames]', name)
-          .row.form-group
-            .col-md-12
-              button.add.btn.btn-sm.btn-default(type='button')
-                | &nbsp;#{('activities.resource')}
       hr
       +submitButtons('Save')
 
-mixin resourceRow(name, limit, isRegistrationOpen, canUnsubscribe)
+mixin resourceRow(name, limit)
   .row.form-group
     .col-xs-3.col-sm-4
-      input.form-control(name='resources[names]', value=name, type='text', placeholder=('activities.label'))
+      +controlLabel('bezeichnung', 'Label')
+      input.form-control(name='resources[names]', value=name, type='text', placeholder=('Meeting'))
     .col-xs-3.col-sm-2
-      input.form-control(name='resources[limits]', value=limit, type='text', placeholder=('activities.unlimited'))
-    .col-xs-2.col-sm-2
-      select.form-control(name='resources[isRegistrationOpen]')
-        option(value='yes', selected=(isRegistrationOpen ? true : false)) #{('activities.possible')}
-        option(value='no', selected=(isRegistrationOpen ? false : true)) #{('activities.impossible')}
-    .col-xs-2.col-sm-2
-      select.form-control(name='resources[canUnsubscribe]')
-        option(value='yes', selected=(canUnsubscribe ? true : false)) #{('activities.possible')}
-        option(value='no', selected=(canUnsubscribe ? false : true)) #{('activities.impossible')}
+      +controlLabel('anzahl', 'Limit')
+      input.form-control(name='resources[limits]', value=limit, type='text', placeholder=('unlimited'))
+    +hidden('resources[isRegistrationOpen]', true)
+    +hidden('resources[canUnsubscribe]', true)
+    br
