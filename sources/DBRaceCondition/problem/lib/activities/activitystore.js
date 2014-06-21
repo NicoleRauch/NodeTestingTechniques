@@ -22,7 +22,7 @@ module.exports = {
   },
 
   saveActivity: function (activity, callback) {
-    persistence.save(activity.state, callback);
+    persistence.saveWithVersion(activity.state, callback);
   }
 
 };

@@ -55,26 +55,5 @@ describe('Activity application with DB - shows activities -', function () {
     expressApp = request(createApp());
   });
 
-  it('shows only current and future activities as upcoming', function (done) {
-    expressApp
-      .get('/upcoming')
-      .expect(200)
-      .expect(/Current Activity/)
-      .expect(/Future Activity/, function (err, res) {
-        expect(res.text).to.not.contain('Past Activity');
-        done(err);
-      });
-  });
-
-  it('shows only past activities as past', function (done) {
-    expressApp
-      .get('/past')
-      .expect(200)
-      .expect(/Past Activity/, function (err, res) {
-        expect(res.text).to.not.contain('Current Activity');
-        expect(res.text).to.not.contain('Future Activity');
-        done(err);
-      });
-  });
 
 });

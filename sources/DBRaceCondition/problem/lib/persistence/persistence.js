@@ -1,6 +1,7 @@
 'use strict';
 var conf = require('nconf');
 var ourDB;
+var CONFLICTING_VERSIONS = conf.get('beans').get('constants').CONFLICTING_VERSIONS;
 
 var DBSTATE = { OPEN: 'OPEN', CLOSED: 'CLOSED', OPENING: 'OPENING' };
 var ourDBConnectionState = DBSTATE.CLOSED;
@@ -34,6 +35,10 @@ module.exports = function (collectionName) {
       });
     },
 
+    getById: function (id, callback) {
+      this.getByField({id: id}, callback);
+    },
+
     getByField: function (fieldAsObject, callback) {
       performInDB(function (err, db) {
         if (err) { return callback(err); }
@@ -55,6 +60,35 @@ module.exports = function (collectionName) {
 
     save: function (object, callback) {
       this.update(object, object.id, callback);
+    },
+
+    saveWithVersion: function (object, callback) {
+      var self = this;
+      if (object.id === null || object.id === undefined) {
+        return callback(new Error('Given object has no valid id'));
+      }
+      performInDB(function (err, db) {
+        if (err) { return callback(err); }
+        var collection = db.collection(collectionName);
+        var oldVersion = object.version;
+        object.version = oldVersion ? oldVersion + 1 : 1;
+        self.getById(object.id, function (err, result) {
+          if (err) { return callback(err); }
+          if (result) { // object exists
+            collection.findAndModify({id: object.id, version: oldVersion}, [], object, {'new': true, upsert: false}, function (err, newObject) {
+              if (err) { return callback(err); }
+              if (!newObject) {
+                // something went wrong: restore old version count
+                object.version = oldVersion;
+                return callback(new Error(CONFLICTING_VERSIONS));
+              }
+              callback(null, newObject);
+            });
+          } else { // object is not yet persisted
+            self.save(object, callback);
+          }
+        });
+      });
     },
 
     update: function (object, storedId, callback) {
