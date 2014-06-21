@@ -69,5 +69,22 @@ app.post('/submit', function (req, res, next) {
   });
 });
 
+app.get('/subscribe/:url/:resource', function (req, res, next) {
+  var resourceName = req.params.resource;
+  var activityUrl = req.params.url;
+  activitiesService.addVisitorTo("memberId", activityUrl, resourceName, moment(), function (err) {
+    if (err) { return next(err); }
+    res.redirect('/activities/' + encodeURIComponent(activityUrl));
+  });
+});
+
+app.get('/unsubscribe/:url/:resource', function (req, res, next) {
+  var resourceName = req.params.resource;
+  var activityUrl = req.params.url;
+  activitiesService.removeVisitorFrom("memberId", activityUrl, resourceName, function (err) {
+    if (err) { return next(err); }
+    res.redirect('/activities/' + encodeURIComponent(activityUrl));
+  });
+});
 
 module.exports = app;
