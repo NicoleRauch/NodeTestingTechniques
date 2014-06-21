@@ -4,7 +4,6 @@ var passport = require('passport');
 
 var conf = require('nconf');
 var beans = conf.get('beans');
-var membersAPI = beans.get('membersAPI');
 var memberstore = beans.get('memberstore');
 var misc = beans.get('misc');
 

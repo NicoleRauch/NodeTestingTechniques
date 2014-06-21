@@ -17,13 +17,11 @@
   "constants": {"module": "./lib/commons/constants"},
   "fieldHelpers": {"module": "./lib/commons/fieldHelpers"},
   "misc": {"module": "./lib/commons/misc"},
-  "notifications": {"module": "./lib/notifications"},
   "validation": {"module": "./lib/commons/validation"},
   
   "accessrights": {"module": "./lib/middleware/accessrights"},
   "expressSessionConfigurator": {"module": "./lib/middleware/expressSessionConfigurator"},
   "expressViewHelper": {"module": "./lib/middleware/expressViewHelper"},
   "secureByLogin": {"module": "./lib/middleware/secureByLogin"},
-  "secureSuperuserOnly": {"module": "./lib/middleware/secureSuperuserOnly"},
-  "serverpathRemover": {"module": "./lib/middleware/serverpathRemover"}
+  "secureSuperuserOnly": {"module": "./lib/middleware/secureSuperuserOnly"}
 }

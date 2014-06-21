@@ -43,10 +43,6 @@ module.exports = function (internalAppName, configuredBeans) {
       app.use(beans.get('expressViewHelper'));
       app.use('/', beans.get(appName));
 
-      var appLogger = { error: function () { return undefined; } };
-      app.use(beans.get('handle404')(appLogger));
-      app.use(beans.get('handle500')(appLogger));
-
       i18n.registerAppHelper(app);
       i18n.addPostProcessor('jade', function (val, key, opts) {
         return jade.compile(val, opts)();

@@ -6,7 +6,6 @@ var conf = require('nconf');
 var beans = conf.get('beans');
 
 var Member = beans.get('member');
-var api = beans.get('membersAPI');
 var memberstore = beans.get('memberstore');
 var misc = beans.get('misc');
 
@@ -45,14 +44,6 @@ app.get('/', function (req, res, next) {
     if (err) { return next(err); }
     res.render('index', { members: members });
   });
-});
-
-app.get('/checknickname', function (req, res) {
-  misc.validate(req.query.nickname, req.query.previousNickname, api.isValidNickname, res.end);
-});
-
-app.get('/checkemail', function (req, res) {
-  misc.validate(req.query.email, req.query.previousEmail, api.isValidEmail, res.end);
 });
 
 app.get('/new', function (req, res, next) {

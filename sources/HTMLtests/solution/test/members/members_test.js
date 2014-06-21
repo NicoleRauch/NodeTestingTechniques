@@ -6,7 +6,6 @@ var expect = require('must');
 
 var beans = require('../../testutil/configureForTest').get('beans');
 var Member = beans.get('member');
-var membersAPI = beans.get('membersAPI');
 var memberstore = beans.get('memberstore');
 var dummymember;
 
