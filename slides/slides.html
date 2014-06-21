@@ -857,6 +857,19 @@ it('shows only past activities as past', function (done) {
     </p>
   </section>
 
+      
+  <section>
+    <h2>Drawback: Coverage Instrumentation</h2>
+
+    <p>
+      <b>Problem:</b> Coverage tool instruments all code, even those bits that are run inside MongoDB. This does not work because MongoDB does not know about instrumented code.
+    </p>
+
+    <aside class="notes">
+      Hier die Slides.
+    </aside>
+  </section>
+
 </section>
 
 <!-- RACE CONDITIONS - N -->
@@ -942,18 +955,6 @@ it('shows only past activities as past', function (done) {
       </ul>
       <li>Test checks that the modification from our test as well as the concurrent modification is present in the object in question after the save operation.</li>
     </ul>
-
-    <aside class="notes">
-      Hier die Slides.
-    </aside>
-  </section>
-    
-<section>
-    <h2>Drawback: Coverage Instrumentation</h2>
-
-    <p>
-      <b>Problem:</b> Coverage tool instruments all code, even those bits that are run inside MongoDB. This does not work because MongoDB does not know about instrumented code.
-    </p>
 
     <aside class="notes">
       Hier die Slides.
