@@ -1,0 +1,12 @@
+extends ../../../views/layout
+
+include members-forms
+
+block title
+  - if (accessrights.isRegistered())
+    | #{t('members.edit')}
+  - else
+    | #{t('members.create')}
+
+block content
+  +memberform(member)

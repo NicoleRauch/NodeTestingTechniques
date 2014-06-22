@@ -1,0 +1,26 @@
+{
+  "authenticationApp": {"module": "./lib/authentication"},
+  "membersApp": {"module": "./lib/members"},
+  "siteApp": {"module": "./lib/site"},
+
+  "membersAPI": {"module": "./lib/members/membersAPI"},
+
+  "memberstore": {"module": "./lib/members/memberstore"},
+
+  "membersPersistence": {
+    "module": "./lib/persistence/persistence",
+    "constructorArgs": { "collectionName": "memberstore" }
+  },
+  
+  "member": {"module": "./lib/members/member"},
+
+  "fieldHelpers": {"module": "./lib/commons/fieldHelpers"},
+  "misc": {"module": "./lib/commons/misc"},
+  "validation": {"module": "./lib/commons/validation"},
+  
+  "accessrights": {"module": "./lib/middleware/accessrights"},
+  "expressSessionConfigurator": {"module": "./lib/middleware/expressSessionConfigurator"},
+  "expressViewHelper": {"module": "./lib/middleware/expressViewHelper"},
+  "redirectRuleForNewUser": {"module": "./lib/middleware/redirectRuleForNewUser"},
+  "secureByLogin": {"module": "./lib/middleware/secureByLogin"}
+}

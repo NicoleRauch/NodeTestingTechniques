@@ -1,0 +1,4 @@
+{
+  "sympa": {},
+  "membersPersistence": {"module": "./test/persistence/testpersistence"}
+}

@@ -1,0 +1,45 @@
+include  ../../../views/formComponents
+
+mixin memberform(member)
+  form#memberform(action='/members/submit',method='post')
+    fieldset
+      .row
+        .col-md-12
+          h2
+            if (accessrights.isRegistered())
+              | #{member.nickname()}
+            else
+              | #{t('members.new')}
+            +memberSubmitButtons
+
+      .row
+        .col-md-12
+          legend #{t('members.personal_data')}
+      .row
+        .col-md-6
+          +hidden('id', member.id())
+          +hidden('previousNickname', member.nickname())
+          +hidden('previousEmail', accessrights.isRegistered() ? member.email() : '')
+          +hidden('created', member.created())
+          +text('nickname', t('members.nickname'), member.nickname())
+          +text('firstname', t('members.firstname'), member.firstname())
+          +text('lastname', t('members.lastname'), member.lastname())
+          +text('email', t('members.email'), member.email())
+          +twitter('twitter', t('members.twitter'), member.twitter())
+        .col-md-6
+          +text('location', t('members.location'), member.location())
+          +text('profession', t('members.profession'), member.profession())
+          +text('interests', t('members.interests'), member.interests())
+          +text('site', t('members.web'), member.site())
+          +text('reference', t('members.reference'), member.reference())
+      .row
+        .col-md-12
+          +memberSubmitButtons
+
+mixin memberSubmitButtons
+  .btn-group.pull-right
+    if (accessrights.isRegistered())
+      a.btn.btn-default(href='javascript:history.back()', type='cancel') #{t('general.back')}
+    else
+      a.btn.btn-danger(href='/auth/logout', type='cancel') #{t('members.cancel')}
+    button.btn.btn-primary(type='submit') #{t('general.save')}
