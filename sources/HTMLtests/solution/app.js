@@ -55,7 +55,6 @@ module.exports = {
     app.use(i18n.handle);
     app.use(beans.get('accessrights'));
     app.use(beans.get('secureByLogin'));
-    app.use(beans.get('secureSuperuserOnly'));
     app.use(beans.get('expressViewHelper'));
     app.use(beans.get('redirectRuleForNewUser'));
 

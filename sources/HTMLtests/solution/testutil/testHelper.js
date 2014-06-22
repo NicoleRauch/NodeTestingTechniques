@@ -5,9 +5,9 @@ var userStub = require('./userStub');
 var i18n = require('i18next');
 var jade = require('jade');
 
-module.exports = function (internalAppName, configuredBeans) {
+module.exports = function (internalAppName) {
   var appName = internalAppName;
-  var beans = configuredBeans || require('./configureForTest').get('beans');
+  var beans = require('./configureForTest').get('beans');
 
   i18n.init({
     supportedLngs: ['de', 'en'],
@@ -17,23 +17,11 @@ module.exports = function (internalAppName, configuredBeans) {
   });
 
   return {
-    createApp: function (memberID) {  /* add middleware list as dynamic params */
-      var i;
-      var middleware;
+    createApp: function (memberID) {
       var app = express();
       app.locals.pretty = true;
       app.enable('view cache');
-      app.use(require('cookie-parser')());
-      app.use(require('body-parser').urlencoded());
       app.use(i18n.handle);
-      app.use(require('express-session')({secret: 'secret', cookie: {maxAge: 10000}}));
-
-      for (i = 1; i < arguments.length; i = i + 1) {
-        middleware = arguments[i];
-        if (middleware) {
-          app.use(middleware);
-        }
-      }
 
       if (memberID) {
         var Member = beans.get('member');
