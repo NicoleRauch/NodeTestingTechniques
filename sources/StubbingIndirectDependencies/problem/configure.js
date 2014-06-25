@@ -6,7 +6,8 @@ var nconf = require('nconf');
 function createConfiguration() {
   nconf.defaults({
     mongoHost: 'localhost',
-    mongoPort: '27017'
+    mongoPort: '27017',
+    mongoDB: 'swk-spa'
   });
   return nconf;
 }
