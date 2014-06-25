@@ -2,7 +2,6 @@
 *.gz
 *.toc
 *.log
-**/.idea
 **/forms.html
 **/node_modules
 **/contents.aux
