@@ -11,7 +11,7 @@ module.exports = function (config) {
       'public/jquery.js',
       'public/jquery.validate.js',
       'public/check-form.js',
-      'frontendtests/fixtures/forms.html',
+      'frontendtests/fixtures/manual_forms.html',
       'frontendtests/fixtures/fixtures.js',
       'frontendtests/*.js'
     ],
