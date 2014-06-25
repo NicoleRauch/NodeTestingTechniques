@@ -8,6 +8,7 @@ function createConfiguration() {
   nconf.defaults({
     mongoHost: 'localhost',
     mongoPort: '27017',
+    mongoDB: 'swk-spa',
     beans: new Beans('./config/beans.json')
   });
   return nconf;

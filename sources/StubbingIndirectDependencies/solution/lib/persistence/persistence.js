@@ -11,7 +11,7 @@ module.exports = function (collectionName) {
   function newDB() {
     var host = conf.get('mongoHost');
     var port = parseInt(conf.get('mongoPort'), 10);
-    return new Db('swk', new Server(host, port), {safe: false});
+    return new Db(conf.get('mongoDB'), new Server(host, port), {safe: false});
   }
 
   function performInDB(callback) {
