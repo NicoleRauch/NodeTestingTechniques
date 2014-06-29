@@ -472,18 +472,19 @@ beforeEach(function () {
   <section>
     <h2>Application Configuration</h2>
 
-    <p><b>Problem:</b> We configure our application via a configuration framework. How can we provide a standardized test configuration with minimal setup?</p>
-    <p>We do not want to change the configuration in each test setup, we only want "<i>the</i> test configuration". (There can be exceptions to this rule)</p>
-
+    <p><b>Problem:</b> How can we provide a standardized test configuration with minimal setup?</p>
     <aside class="notes">
       Hier die Slides für nconf.
     </aside>
   </section>
 
   <section>
-    <h3>Testing with dependencies on the local environment?</h3>
-
-    <p>This is not acceptable. We need to provide an independent testing configuration.</p>
+    <h4>Single Test Configuration</h4>
+    <p>We configure our application via a configuration framework. We do not want to change the configuration in
+      each test setup, we only want "<i>the</i> test configuration".</p>
+    <br>
+    <h4>No dependencies on the local environment</h4>
+    <p>We want to provide an independent testing configuration.</p>
     <ul>
       <li>Logging</li>
       <li>Passwords</li>
@@ -499,12 +500,11 @@ beforeEach(function () {
   </section>
 
   <section>
-    <h3>EXAMPLE</h3>
-    <h4>Superuser Privileges</h4>
+    <h3>EXAMPLE: Superuser Privileges</h3>
 
     <p>A configuration file defines the ids of users that have superuser privileges.</p>
+    <p>We use <code>nconf.js</code> to read the configuration files.</p>
     <p>We want to test that the privileges have an effect.</p>
-    <p>We chose <code>nconf.js</code> for that job</p>
 
     <aside class="notes">
       <p>Show in code</p>
@@ -512,7 +512,7 @@ beforeEach(function () {
   </section>
 
   <section>
-    <h3>EXAMPLE</h3>
+    <h3>Superuser Privileges</h3>
     
     <h6>configure.js</h6>
     <pre class="javascript"><code data-trim contenteditable>
@@ -556,18 +556,19 @@ beforeEach(function (done) {
     </aside>
   </section>
 
-  <section>
+  <section style="text-align: center;">
     <h2>What would be a better solution?</h2>
-
-    <aside class="notes">
-      <p>Switch to workspace "ConfigurationForTests/problem"</p>
-    </aside>
+    <p>&nbsp;</p>
+    <div class="fragment">
+      <h3>Try out</h3>
+      <h3>Discuss</h3>
+    </div>
   </section>
 
   <section>
     <h2>Our solution</h2>
 
-    <p>We use <code>nconf.overrides()</code> function for that to provide a standardised test setup.</p>
+    <p>We create a fixed test configuration and initialise it via <code>nconf.overrides()</code> to provide a standardised test setup.</p>
     <h6>configureForTest.js</h6>
     <pre class="javascript"><code data-trim contenteditable>
 var nconf = require('nconf');
@@ -584,7 +585,7 @@ var nconf = require('../../configure');
 require('../../testutil/configureForTest');
     </code></pre>
     <br>
-    <p>Additionally, we do not need to setup anything in a <code>beforeEach</code></p>
+    <p>We do not need any additional setup in a <code>beforeEach</code>.</p>
 
     <aside class="notes">
       <p>Switch to workspace "ConfigurationForTests/solution"</p>
@@ -593,12 +594,9 @@ require('../../testutil/configureForTest');
 
 <!-- Cool Beans / nconf extra -->
   <section>
-    <h1>Extra</h1>
-    <h2>Hide your ressources</h2>
+    <h2>Extra: Hide your resources</h2>
   
-    <p>
-      <b>Problem:</b> How can you protect external ressources from accidental change during a (potentially broken) test?
-    </p>
+    <p>How to protect external resources from accidental change during a (potentially broken) test?</p>
 
     <aside class="notes">
       Database / 3rd party services / files
@@ -614,17 +612,17 @@ require('../../testutil/configureForTest');
 
     <h6>beans.json</h6>
     <pre class="javascript"><code data-trim contenteditable>
-"sympa": {"module": "./lib/groups/sympa"},
-"activitiesPersistence": {
+"membersPersistence": {
   "module": "./lib/persistence/persistence",
-  "constructorArgs": { "collectionName": "activitystore" }
-},
+  "constructorArgs": { "collectionName": "memberstore" }
+}
     </code></pre>
 
     <h6>testbeans.json</h6>
     <pre class="javascript"><code data-trim contenteditable>
-"sympa": {},
-"activitiesPersistence": {"module": "./test/persistence/testpersistence"},
+"membersPersistence": {
+  "module": "./test/persistence/testpersistence"
+}
     </code></pre>
 
     <aside class="notes">
@@ -639,8 +637,7 @@ require('../../testutil/configureForTest');
     <h2>HTML Tests</h2>
   
     <p>
-      <b>Problem:</b> How can I check that pages are rendered correctly. I don't want to start a full-fledged server, 
-      but rather a minimal configuration of the <code>express</code> app stack?
+      <b>Problem:</b> How can we check that pages are rendered correctly without starting a full-fledged server?
     </p>
 
     <aside class="notes">
@@ -649,16 +646,15 @@ require('../../testutil/configureForTest');
   </section>
   
   <section>
-    <h2>What we want to test</h2>
+    <h2>We want to test that</h2>
 
     <ul>
       <li>The rendered HTML is as we want it to be</li>
-      <li>Everything below the HTML renderer is wired correctly</li>
-      <li>The relevant middleware (i18n, accessrights) works and is wired correctly:</li>
+      <li>The relevant middleware (i18n, accessrights) works correctly:</li>
       <ul>
         <li>A user may only edit his/her own member data.</li>
-        <li>If there is no user logged in, the member pages are not visible at all.</li>
-        <li>Internationalization.</li>
+        <li>If the test user is not logged in, the member pages are not visible at all.</li>
+        <li>Internationalisation.</li>
       </ul>
     </ul>
   </section>    
@@ -667,7 +663,7 @@ require('../../testutil/configureForTest');
     <h2>Obstacles to Testing</h2>
     <ul>
       <li>The current user is part of the session and managed by a third-party module named <code>passport</code>. Authentication is done via OpenID or github.</li>
-      <li>I18n is also digged in deeply as middleware</li>
+      <li>I18n middleware requires a complicated setup.</li>
     </ul>
 
     <aside class="notes">
