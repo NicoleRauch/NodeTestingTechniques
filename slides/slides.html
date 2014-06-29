@@ -84,27 +84,19 @@
 <!-- CONTEXT -->
 <section>
   <section>
-    <h2>Context</h2>
+    <h2>Background</h2>
 
     <ul>
-      <li>Server application running on node.js</li>
       <li>Community platform</li>
       <li>2 main contributors</li>
-    </ul>
-
-    <aside class="notes"></aside>
-  </section>
-
-  <section>
-    <h2>Facts</h2>
-
-    <ul>
       <li>Live since August 2013</li>
       <li>About 850 registered members</li>
+    </ul>
+    <ul>
+      <li>Server application running on node.js</li>
       <li>3-tier Architecture</li>
       <li>Stateless Backend</li>
     </ul>
-
     <aside class="notes"></aside>
   </section>
 </section>
@@ -112,14 +104,26 @@
 <!-- AGENDA This Workshop -->
 <section>
   <section>
-    <h2>Workshop Agenda</h2>
+    <h2>Workshop Mechanics</h2>
+    
+    <h6>We&hellip;</h6>
     <ul>
-      <li>We present a problem we ran into</li>
-      <li>We provide a minimal example</li>
-      <li>Think about possible solutions (in pairs or triples)</li>
-      <li>We discuss your ideas</li>
-      <li>We present our current solution</li>
+      <li>&hellip; present a problem we ran into</li>
+      <li>&hellip; provide a minimal example</li>
     </ul>
+    <h6>You&hellip;</h6>
+    <ul>
+      <li>&hellip; think about possible solutions (in pairs or triples)</li>
+      <li>&hellip; can try out your ideas in the code</li>
+    </ul>
+    <h6>We&hellip;</h6>
+    <ul>
+      <li>&hellip; discuss your ideas</li>
+      <li>&hellip; present our current solution</li>
+    </ul>
+    <p>&nbsp;</p>
+    <p>Problems and solutions are available in sourcecode.</p>
+    <p>Code is executable, tests can be run.</p>
   </section>
     
   <section>
@@ -132,40 +136,18 @@
     </ul>
   </section>
 
-  <section>
-    <h2>Mechanics</h2>
-    <ul>
-      <li>Problems are available in sourcecode</li>
-      <li>Code is executable, tests can be run</li>
-      <li>You can try out your ideas in the code</li>
-      <li>Solutions are available in sourcecode as well</li>
-      <li>If you cheat, please be silent in discussions</li>
-    </ul>
-  </section>
-
-  <section>
+  <section style="text-align: center">
     <h2>Laptop Setup Time</h2>
-    <p>
-      Clone <code>https://github.com/NicoleRauch/NodeTestingTechniques</code> and follow the instructions from the readme.
-    </p>
-    <p>
-      Or copy the VM from an USB stick - we will give you sticks in a second.
-    </p>
+    <p>Copy the VM from an USB stick - we will give you sticks in a second.</p>
+    <br>
+    <p>Or</p>
+    <br>
+    <p>Clone <code>https://github.com/NicoleRauch/NodeTestingTechniques</code> and follow the instructions from the readme.</p>
   </section>
 </section>
 
 <!-- VARIOUS TESTING NEEDS - A -->
 <section>
-  <section>
-    <h2>Testing Needs</h2>
-    <p>
-      <b>Problem:</b> We want to test different aspects of the application.
-    </p>
-    <p>There are good libraries out there. 
-      Which one should we choose? - These libraries have different trade-offs and abilities. How to adapt to various testing needs?
-    </p>
-  </section>
-
   <section>
     <h2>One Language &ndash; One Kind of Tests?</h2>
     <p>Not quite. We have different aspects and runtime environments.</p>
@@ -177,6 +159,11 @@
       <li>Tests for frontend code.</li>
       <li>HTML tests.</li>
     </ul>
+    
+    <p>&nbsp;</p>
+    <p>There are good libraries out there. Which one should we choose? <br>
+      These libraries have different trade-offs and abilities.
+    </p>
 
     <aside class="notes">
       First it felt strange to use different frameworks even on the backend. But they are all in BDD style.
@@ -185,10 +172,10 @@
 
   <section>
     <h2>Frameworks we use</h2>
-    <p>All tests have the style in common. They all are written in BDD style.</p>
+    <p>All tests have the style in common. They are all written in BDD style.</p>
     <ul>
       <li><code>Mocha</code> with <code>must</code> on the backend. These tests resemble <code>Jasmine</code> tests.</li>
-      <li><code>supertest</code> to easily test <code>express</code> applications without starting the server.</li>
+      <li><code>supertest</code> to easily test <code>express</code> applications without starting a full-stack server.</li>
       <li><code>request</code> for integrative smoke tests.</li>
       <li><code>Jasmine</code> with <code>karma</code> for the frontend tests</li>
     </ul>
@@ -198,6 +185,7 @@
     </aside>
   </section>
 
+<!--
   <section style="text-align: center">
     <p>This workshop focuses on</p>
     <h1>Patterns we use</h1>
@@ -209,6 +197,7 @@
       Middleware for user fakes.
     </aside>
   </section>
+-->
 </section>
 
 <!-- COOL BEANS - N (!) -->
@@ -411,8 +400,7 @@ it('lists all members', function (done) {
   </section>
 
   <section>
-    <h2>Dependency Injection</h2>
-    <p>We use a framework called <code>CoolBeans</code>.</p>
+    <h2>Framework: Cool Beans</h2>
     <h6>We define our singleton beans:</h6>
     <pre class="javascript"><code data-trim contenteditable>
 {
@@ -442,7 +430,6 @@ var service = require('nconf').get('beans').get('membersService');
   </section>
     
   <section>
-    <h2>Cool Beans</h2>
     <p>The resulting stubbing code is much simpler:</p>
     <h6>Single-layer test:</h6>
     <pre class="javascript"><code data-trim contenteditable>
@@ -473,6 +460,11 @@ beforeEach(function () {
         
   </section>
 
+  <section style="text-align: center">
+    <h2>Application Structure</h2>
+    <img src="pics/MembersModule.svg">
+  </section>
+
 </section>
 
 <!-- NCONF - A -->
@@ -480,12 +472,8 @@ beforeEach(function () {
   <section>
     <h2>Application Configuration</h2>
 
-    <p>
-      <b>Problem:</b> We configure our application via a configuration framework. How can we provide a standardized test configuration with minimal setup?
-    </p>
-    <p>
-      We do not want to change the configuration in each test setup, we only want "<i>the</i> test configuration". (There can be exceptions to this rule)
-    </p>
+    <p><b>Problem:</b> We configure our application via a configuration framework. How can we provide a standardized test configuration with minimal setup?</p>
+    <p>We do not want to change the configuration in each test setup, we only want "<i>the</i> test configuration". (There can be exceptions to this rule)</p>
 
     <aside class="notes">
       Hier die Slides für nconf.
