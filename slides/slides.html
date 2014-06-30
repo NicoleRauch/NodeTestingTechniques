@@ -106,17 +106,17 @@
   <section>
     <h2>Workshop Mechanics</h2>
     
-    <h6>We&hellip;</h6>
+    <h6>We &hellip;</h6>
     <ul>
       <li>&hellip; present a problem we ran into</li>
       <li>&hellip; provide a minimal example</li>
     </ul>
-    <h6>You&hellip;</h6>
+    <h6>You &hellip;</h6>
     <ul>
       <li>&hellip; think about possible solutions (in pairs or triples)</li>
       <li>&hellip; can try out your ideas in the code</li>
     </ul>
-    <h6>We&hellip;</h6>
+    <h6>We &hellip;</h6>
     <ul>
       <li>&hellip; discuss your ideas</li>
       <li>&hellip; present our current solution</li>
@@ -132,7 +132,7 @@
       <li>Most examples are tiny and minimalist<br>
       <i>and it was hard to get them so small!</i></li>
       <li>Please, no discussions about overengineered solutions to trivial problems</li>
-      <li>We can show you the original code if you like&hellip;</li>
+      <li>We can show you the original code if you like &hellip;</li>
     </ul>
   </section>
 
@@ -394,7 +394,7 @@ it('lists all members', function (done) {
     
   <section style="text-align: center;">
     <h2>Our Solution</h2>
-    We decided to use&hellip;
+    We decided to use &hellip;
     <p>&nbsp;</p>
     <h2 class="fragment">Dependency Injection</h2>
   </section>
@@ -714,13 +714,12 @@ createApp: function (memberID) {
     <h6>userStub.js</h6>
     <pre class="javascript"><code data-trim contenteditable>
 module.exports = function (user) {
-  var userStub = function (req, res, next) {
+  return function (req, res, next) {
     req.user = user || {}; // for model checks
     res.locals.user = req.user; // for jade checks
     req.isAuthenticated = function () { return true; };
     next();
   };
-  return userStub;
 };
     </code></pre>
     <aside class="notes">
@@ -729,10 +728,11 @@ module.exports = function (user) {
 
   <section>
     <h2>Benefits</h2>
+    <p>We can &hellip;</p>
     <ul>
-      <li>We can easily set up isolated parts of the application for testing.</li>
-      <li>We can rely on a defined set of plugged-in middleware.</li>
-      <li>We can define which user is logged in.</li>
+      <li>&hellip; easily set up isolated parts of the application for testing.</li>
+      <li>&hellip; rely on a defined set of plugged-in middleware.</li>
+      <li>&hellip; define which user is logged in.</li>
     </ul>
     <aside class="notes">
     </aside>
@@ -746,7 +746,7 @@ module.exports = function (user) {
     <h2>DB Tests</h2>
   
     <p>
-      <b>Problem:</b> How to test a database in integration?
+      <b>Problem:</b> How to test a database in integration given our test setup stubs the database?
     </p>
   </section>  
   
@@ -755,8 +755,8 @@ module.exports = function (user) {
     <ul>
       <li>We use native queries and other database features.</li>
     </ul>
-    <br/>    
-    <p>Questions:</p>
+    <p>&nbsp;</p>    
+    <p><b>Questions:</b></p>
     <ul>
       <li>How to test the native queries?</li>
       <li>How to test the database integration?</li>
@@ -766,11 +766,16 @@ module.exports = function (user) {
       Hier die Slides.
     </aside>
   </section>
-  
-  <section>
-      <h1>?</h1>
+
+  <section style="text-align: center;">
+    <h2>What could be a solution?</h2>
+    <p>&nbsp;</p>
+    <div class="fragment">
+      <h3>Try out</h3>
+      <h3>Discuss</h3>
+    </div>
   </section>
-    
+
   <section>
     <h2>Our Solution</h2>
   
@@ -791,10 +796,10 @@ module.exports = require('./abstractConfigureForTest')('testbeansWithDB.json');
       <h6>The modified beans definitions in <code>testbeansWithDB.json</code>:</h6>
     <pre class="javascript"><code data-trim contenteditable>
 {
-  "activitiesPersistence": {"module": "./lib/persistence/persistence",
-    "constructorArgs": {
-      "collectionName": "teststore"
-    }}
+  "activitiesPersistence": {
+    "module": "./lib/persistence/persistence",
+    "constructorArgs": { "collectionName": "teststore" }
+  }
 }
     </code></pre>
   </section>
@@ -804,14 +809,14 @@ module.exports = require('./abstractConfigureForTest')('testbeansWithDB.json');
       
       <h6>The setup clears the database and persists the desired objects:</h6>
     <pre class="javascript"><code data-trim contenteditable>
-    persistence.drop(function () {
-      activitystore.saveActivity(futureActivity, function (err) {
-        if (err) { done(err); }
-        activitystore.saveActivity(currentActivity, function (err) {
-          if (err) { done(err); }
-          activitystore.saveActivity(pastActivity, function (err) {
-            done(err);
-    // ...
+persistence.drop(function () {
+  activitystore.saveActivity(futureActivity, function (err) {
+    if (err) { done(err); }
+    activitystore.saveActivity(currentActivity, function (err) {
+      if (err) { done(err); }
+      activitystore.saveActivity(pastActivity, function (err) {
+        done(err);
+// ...
     </code></pre>
 
       <h6>The tests:</h6>
@@ -889,31 +894,37 @@ it('shows only past activities as past', function (done) {
     <h2>DB Race Conditions</h2>
 
     <p>
-      <b>Question:</b> How can we test that
+      <b>Question:</b> How can we test that &hellip;
     </p>
 
     <ul>
-      <li>there will be no data loss due to race conditions?</li>
-      <li>the automatic retry succeeds?</li>
+      <li>&hellip; there will be no data loss due to race conditions?</li>
+      <li>&hellip; the automatic retry succeeds?</li>
     </ul>
 
     <aside class="notes">
       Hier die Slides.
     </aside>
   </section>
-  
-  <section>
-    <h2>?</h2>
+
+  <section style="text-align: center;">
+    <h2>What could be a solution?</h2>
+    <p>&nbsp;</p>
+    <div class="fragment">
+      <h3>Try out</h3>
+      <h3>Discuss</h3>
+    </div>
   </section>
+
   <section>
-    <h2>DB Race Conditions</h2>
+    <h2>No-data-loss test</h2>
 
     <p>
-      <b>Our Solution:</b> (No-data-loss test)
+      <b>Our Solution:</b> 
     </p>
 
     <ul>
-      <li>Actual race condition (i.e.~interleaved load-modify-save sequence) cannot be established in automated test</li>
+      <li>Actual race condition (i.e. interleaved load-modify-save sequence) cannot be established in automated tests.</li>
       <li>Trick:</li>
       <ul>
         <li>stub the load operation so that it returns the object in question <b>before</b> the concurrent modification</li>
@@ -929,17 +940,17 @@ it('shows only past activities as past', function (done) {
   </section>
   
   <section>
-    <h2>DB Race Conditions</h2>
+    <h2>Automatic-retry test</h2>
 
     <p>
-      <b>Our Solution:</b> (Automatic-retry test)
+      <b>Our Solution:</b> 
     </p>
 
     <ul>
       <li>To test the automatic retry:</li>
       <ul>
         <li>stub the load operation so that it returns the object in question <b>before</b> the concurrent modification on the first invocation</li>
-        <li>and the object in question <b>after</b> the concurrent modification on the second invocation (i.e.~when automatic retry is triggered)</li>
+        <li>and the object in question <b>after</b> the concurrent modification on the second invocation (i.e. when automatic retry is triggered)</li>
       </ul>
       <li>Test checks that the modification from our test as well as the concurrent modification is present in the object in question after the save operation.</li>
     </ul>
@@ -957,7 +968,7 @@ it('shows only past activities as past', function (done) {
     <h2>DOM Tests</h2>
 
     <p>
-      <b>Problem:</b> How can I test frontend code that requires a DOM if all I have is jade template files (but no html files)?
+      <b>Problem:</b> How can we test frontend code that requires a DOM if all we have is jade template files (but no HTML files)?
     </p>
 
     <aside class="notes">
@@ -968,9 +979,9 @@ it('shows only past activities as past', function (done) {
   <section>
     <h2>DOM Tests</h2>
 
-    <p>We want to unit test the client side validations. This code relies heavily on DOM elements.</p>
-    <p>We do not have static html files to provide a DOM for testing. 
-      All our html code is rendered at runtime from jade templates and also provided with runtime state (via fields in <code>res.locals</code>)</p>
+    <p>We want to unit test the client side validations. These tests rely heavily on DOM elements.</p>
+    <p>We do not have static HTML files to provide a DOM for testing. 
+      All HTML is rendered at runtime from jade templates and runtime state (via fields in <code>res.locals</code>)</p>
 
   </section>
   
@@ -996,7 +1007,7 @@ html
     p The injected variable is #{val.words}
     </code></pre>
     <br>
-    <p>The input field is marked mandatory via JavaScript (<code>jquery-validation</code>)</p>
+    <p>The input field is marked as mandatory via JavaScript (<code>jquery-validation</code>)</p>
     <aside class="notes">
       <p>#{val.words} is the runtime state</p>
       <p>We only want to check that 'text' is mandatory</p>
@@ -1045,6 +1056,12 @@ describe('The Form', function () {
   });
 });
     </code></pre>
+  </section>
+
+  <section>
+    <h2>Providing the DOM</h2>
+    <p>The resulting HTML can be copied from the browser and saved as a resource for the test.
+    </p>
   </section>
 
   <section>
