@@ -1060,8 +1060,15 @@ describe('The Form', function () {
 
   <section>
     <h2>Providing the DOM</h2>
-    <p>The resulting HTML can be copied from the browser and saved as a resource for the test.
-    </p>
+    <p>The resulting HTML can be copied from the browser and saved as a resource for the test.</p>
+    <p>This file can then be included in the testsetup</p>
+    <h6>fixtures.js</h6>
+    <pre class="javascript"><code data-trim contenteditable>
+(function () {
+  'use strict';
+  document.body.innerHTML += __html__['frontendtests/fixtures/forms.html'];
+}());
+    </code></pre>
   </section>
 
   <section>
