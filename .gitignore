@@ -1,13 +1,7 @@
 *.snm
 *.gz
-*.toc
 *.log
-**/forms.html
+sources/DOMtestsWithJade/solution/frontendtests/fixtures/forms.html
 **/node_modules
-**/contents.aux
-**/folien.aux
-**/folien.nav
-**/folien.out
-**/folien.pdf
 **/coverage
 **/workspace.xml
