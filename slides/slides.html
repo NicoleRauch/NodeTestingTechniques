@@ -42,7 +42,7 @@
       font-size: .55em;
       font-family: monospace;
       line-height: 1.2em;
-      box-shadow: 0 0 6px rgba(0,0,0,.3);
+      box-shadow: 0 0 6px rgba(0,0,0,0);
     }
   </style>
 
@@ -430,7 +430,9 @@ var service = require('nconf').get('beans').get('membersService');
   </section>
     
   <section>
-    <p>The resulting stubbing code is much simpler:</p>
+    <p>
+      <img src="pics/MembersModule.svg" width="50%" style="float:right;margin:0 5px 0 0;">
+      The resulting stubbing code is much simpler:</p>
     <h6>Single-layer test:</h6>
     <pre class="javascript"><code data-trim contenteditable>
 beforeEach(function () {
@@ -462,7 +464,6 @@ beforeEach(function () {
 
   <section style="text-align: center">
     <h2>Application Structure</h2>
-    <img src="pics/MembersModule.svg">
   </section>
 
 </section>
