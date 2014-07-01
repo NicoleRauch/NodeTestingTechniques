@@ -920,11 +920,8 @@ it('shows only past activities as past', function (done) {
   <section>
     <h2>No-data-loss test</h2>
 
-    <p>
-      <b>Our Solution:</b> 
-    </p>
-
-    <ul>
+    <img src="pics/DBRaceConditions.svg" width="50%" style="float:right;margin:0 5px 0 0;">
+    <ul style="display:inline">
       <li>Actual race condition (i.e. interleaved load-modify-save sequence) cannot be established in automated tests.</li>
       <li>Trick:</li>
       <ul>
@@ -943,11 +940,8 @@ it('shows only past activities as past', function (done) {
   <section>
     <h2>Automatic-retry test</h2>
 
-    <p>
-      <b>Our Solution:</b> 
-    </p>
-
-    <ul>
+    <img src="pics/DBRaceConditionsWithRetry.svg" width="50%" style="float:right;margin:0 5px 0 0;">
+    <ul style="display:inline">
       <li>To test the automatic retry:</li>
       <ul>
         <li>stub the load operation so that it returns the object in question <b>before</b> the concurrent modification on the first invocation</li>
